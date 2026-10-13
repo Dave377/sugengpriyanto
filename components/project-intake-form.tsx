@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react"
 import Link from "next/link"
 import { ArrowLeft, ArrowRight, Check, Send } from "lucide-react"
+import { AnimatePresence, motion } from "motion/react"
 
 import * as C from "@/questionnaire-sample/config"
 import { Button } from "@/components/ui/button"
@@ -289,7 +290,15 @@ export default function ProjectIntakeForm() {
         </div>
       )}
 
-      <div className="min-h-[34rem]">
+      <AnimatePresence mode="wait" initial={false}>
+      <motion.div
+        key={step}
+        className="min-h-[34rem]"
+        initial={{ opacity: 0, x: 16 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -16 }}
+        transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+      >
         {step === "start" && <Question title="Tell me about your project." help="Answer a few practical questions about what you&apos;re building, your goals, timeline, and budget. This gives us a useful starting point before we speak."><div className="flex flex-wrap items-center gap-4"><Button type="button" onClick={next}>{answers.projectType ? "Continue where you left off" : "Start questionnaire"} <ArrowRight className="size-4" /></Button><span className="text-muted-foreground text-sm">Takes about 3–7 minutes.</span></div>{answers.projectType && <button type="button" onClick={reset} className="text-muted-foreground mt-6 text-sm underline underline-offset-4">Start over</button>}</Question>}
         {step === "type" && <Question title="What are you looking to build?" help="Choose the closest fit. You can explain the details later."><ChoiceGrid options={C.projectTypes} value={answers.projectType} onChange={(value) => setAnswers((current) => ({ ...current, projectType: value as C.ProjectType, features: current.projectType === value ? current.features : [], budget: current.projectType === value ? current.budget : undefined }))} /></Question>}
         {step === "goal" && <Question title="What is the main goal of this project?" help="Choose the outcome that matters most right now."><ChoiceGrid options={C.goals} value={answers.goal} onChange={(value) => update("goal", value)} />{answers.goal === C.OTHER && <div className="mt-5"><TextField label="Tell me a little more" value={answers.goalOther} onChange={(value) => update("goalOther", value)} /></div>}</Question>}
@@ -308,7 +317,8 @@ export default function ProjectIntakeForm() {
         {step === "mvp" && <Question title="Which features are essential for the first version?" help="Everything else can follow in a later phase."><div className="divide-border divide-y rounded-xl border">{answers.features.filter((value) => value !== C.OTHER && value !== C.NOT_SURE).map((value) => { const label = featureOptions.find((item) => item.value === value)?.label ?? value; const essential = answers.mvpEssential.includes(value); return <div key={value} className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between"><span className="font-medium">{label}</span><div className="flex gap-2"><button type="button" onClick={() => setAnswers((current) => ({ ...current, mvpEssential: essential ? current.mvpEssential.filter((item) => item !== value) : [...current.mvpEssential, value], mvpFuture: current.mvpFuture.filter((item) => item !== value) }))} className={essential ? "bg-primary text-primary-foreground rounded-full px-3 py-1.5 text-sm" : "border-border hover:border-primary rounded-full border px-3 py-1.5 text-sm"}>{essential ? "Essential" : "Can wait"}</button></div></div> })}</div></Question>}
         {step === "contact" && <Question title="How can I reach you?" help="Just the essentials. I won&apos;t add you to a mailing list."><div className="grid gap-5 sm:grid-cols-2"><TextField label="Full name" value={answers.contact.name} onChange={(value) => updateContact("name", value)} required /><TextField label="Email" type="email" value={answers.contact.email} onChange={(value) => updateContact("email", value)} required /><TextField label="Company or project name" value={answers.contact.company} onChange={(value) => updateContact("company", value)} /><TextField label="Role or job title" value={answers.contact.role} onChange={(value) => updateContact("role", value)} /><TextField label="Country" value={answers.contact.country} onChange={(value) => updateContact("country", value)} /><TextField label="Time zone" value={answers.contact.timezone} onChange={(value) => updateContact("timezone", value)} placeholder="For example: GMT+7" /></div><p className="text-muted-foreground mt-8 text-sm">Preferred communication method</p><ChoiceGrid options={C.contactMethods.map((method) => ({ value: method.value, label: method.label }))} value={answers.contact.method} onChange={(value) => updateContact("method", value)} /><label className="text-muted-foreground mt-6 flex items-start gap-3 text-sm"><input type="checkbox" checked={answers.contact.consent} onChange={(event) => updateContact("consent", event.target.checked)} className="accent-primary mt-1 size-4" /><span>I agree that Sugeng can use these details to reply to my project inquiry.</span></label></Question>}
         {step === "review" && <Review answers={answers} featureOptions={featureOptions} budgetOptions={budgetOptions} />}
-      </div>
+      </motion.div>
+      </AnimatePresence>
 
       {error && <p role="alert" className="text-destructive mt-5 text-sm">{error}</p>}
       {step !== "start" && <div className="border-border mt-8 flex flex-col-reverse justify-between gap-3 border-t pt-6 sm:flex-row">

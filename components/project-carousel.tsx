@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { ArrowLeft, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
@@ -12,7 +12,19 @@ type ProjectSlide = {
 
 export default function ProjectCarousel({ slides }: { slides: ProjectSlide[] }) {
   const [activeIndex, setActiveIndex] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
   const pointerStart = useRef<number | null>(null)
+
+  useEffect(() => {
+    if (isPaused || slides.length < 2) return
+
+    const autoplay = window.setInterval(() => {
+      setActiveIndex((index) => (index + 1) % slides.length)
+    }, 6500)
+
+    return () => window.clearInterval(autoplay)
+  }, [isPaused, slides.length])
+
   function showPrevious() {
     setActiveIndex((index) => (index - 1 + slides.length) % slides.length)
   }
@@ -39,10 +51,16 @@ export default function ProjectCarousel({ slides }: { slides: ProjectSlide[] }) 
 
   return (
     <div
-      className="relative min-h-72 touch-pan-y select-none sm:min-h-96"
+      className="relative min-h-72 touch-pan-y select-none sm:min-h-96 md:aspect-video md:min-h-0"
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
       onPointerCancel={() => { pointerStart.current = null }}
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      onFocus={() => setIsPaused(true)}
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) setIsPaused(false)
+      }}
     >
       {slides.map((slide, index) => {
         const offset = (index - activeIndex + slides.length) % slides.length
@@ -60,7 +78,7 @@ export default function ProjectCarousel({ slides }: { slides: ProjectSlide[] }) 
             }`}
             aria-hidden={position !== "active"}
           >
-            <div className={`relative h-full min-h-72 overflow-hidden rounded-lg ${slide.className} ${position === "active" ? "shadow-2xl" : ""}`}>
+            <div className={`relative h-full min-h-72 overflow-hidden rounded-lg sm:min-h-96 md:min-h-0 ${slide.className} ${position === "active" ? "shadow-2xl" : ""}`}>
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_20%,rgba(255,255,255,0.45),transparent_28%),linear-gradient(135deg,transparent_40%,rgba(255,255,255,0.18)_40%,rgba(255,255,255,0.18)_60%,transparent_60%)]" />
               <div className="relative flex h-full flex-col justify-between p-6 pb-20 sm:min-h-96 sm:p-8 sm:pb-24">
                 <div className="flex items-center justify-between text-sm font-medium text-white/80">
@@ -75,6 +93,21 @@ export default function ProjectCarousel({ slides }: { slides: ProjectSlide[] }) 
           </div>
         )
       })}
+
+      <div
+        className="pointer-events-none absolute right-5 bottom-16 left-5 z-30 h-1 overflow-hidden rounded-full bg-white/25"
+        role="progressbar"
+        aria-label={isPaused ? "Carousel autoplay paused" : "Carousel autoplay active"}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={isPaused ? undefined : 0}
+      >
+        <div
+          key={activeIndex}
+          className="carousel-autoplay-progress h-full rounded-full bg-white"
+          style={{ animationPlayState: isPaused ? "paused" : "running" }}
+        />
+      </div>
 
       <div className="pointer-events-none absolute right-5 bottom-5 left-5 z-30 flex items-center justify-between">
         <div className="pointer-events-auto flex gap-1.5" aria-label="Carousel slides">

@@ -125,5 +125,19 @@
     }
   html {
     @apply font-mono;
-    }
+  }
+}
+
+@keyframes carousel-progress {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
+.carousel-autoplay-progress {
+  animation: carousel-progress 6.5s linear forwards;
 }

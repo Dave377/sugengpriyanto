@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button"
 import ProjectCarousel from "@/components/project-carousel"
 import CTASection from "@/components/layout/CTA"
 import LogoClouds from "@/components/ui/logo-cloud"
+import { Reveal } from "@/components/motion/reveal"
+import { TextReveal } from "@/components/motion/text-reveal"
 
 const featuredWork = [
   {
@@ -50,42 +52,51 @@ export default function Page() {
     <main>
       <section className="mx-auto max-w-7xl px-4 pt-20 pb-24 lg:px-8 lg:pt-32">
         <div className="max-w-4xl">
-          <Badge>Independent designer & developer</Badge>
-          <h1 className="font-heading mt-7 max-w-4xl text-5xl leading-[1.05] font-semibold tracking-tight text-balance sm:text-7xl">
-            I design and build digital experiences that make complex ideas feel clear.
-          </h1>
-          <p className="text-muted-foreground mt-8 max-w-2xl text-lg leading-8 text-balance">
-            I help thoughtful teams turn early ideas, growing products, and ambitious redesigns into experiences people understand and want to use.
-          </p>
-          <div className="mt-9 flex flex-wrap items-center gap-3">
-            <Button size="lg" render={<Link href="/start-project" />} nativeButton={false}>
-              Start a project <ArrowRight className="size-4" />
-            </Button>
-            <Button variant="outline" size="lg" render={<Link href="/work" />} nativeButton={false}>
-              View selected work <ArrowUpRight className="size-4" />
-            </Button>
-          </div>
-          <p className="text-muted-foreground mt-10 flex items-center gap-2 text-sm">
-            <span className="bg-emerald-500 size-2 rounded-full" /> Available for selected projects
-          </p>
+          <Reveal delay={0.05}><Badge>Independent designer & developer</Badge></Reveal>
+          <Reveal delay={0.14}>
+            <h1 className="font-heading mt-7 max-w-4xl text-5xl leading-[1.05] font-semibold tracking-tight text-balance sm:text-7xl">
+              <TextReveal text="I design and build digital experiences that make complex ideas feel clear." />
+            </h1>
+          </Reveal>
+          <Reveal delay={0.24}>
+            <p className="text-muted-foreground mt-8 max-w-2xl text-lg leading-8 text-balance">
+              I help thoughtful teams turn early ideas, growing products, and ambitious redesigns into experiences people understand and want to use.
+            </p>
+          </Reveal>
+          <Reveal delay={0.34}>
+            <div className="mt-9 flex flex-wrap items-center gap-3">
+              <Button size="lg" render={<Link href="/start-project" />} nativeButton={false}>
+                Start a project <ArrowRight className="transition-transform group-hover/button:translate-x-1" />
+              </Button>
+              <Button variant="outline" size="lg" render={<Link href="/work" />} nativeButton={false}>
+                View selected work <ArrowUpRight className="transition-transform group-hover/button:-translate-y-0.5 group-hover/button:translate-x-0.5" />
+              </Button>
+            </div>
+          </Reveal>
+          <Reveal delay={0.44}>
+            <p className="text-muted-foreground mt-10 flex items-center gap-2 text-sm">
+              <span className="bg-emerald-500 size-2 animate-pulse rounded-full" /> Available for selected projects
+            </p>
+          </Reveal>
         </div>
       </section>
 
       <LogoClouds />
 
       <section className="mx-auto max-w-7xl px-4 lg:px-8 py-8">
-        <div className="mb-10 flex items-end justify-between gap-6">
+        <Reveal className="mb-10 flex items-end justify-between gap-6">
           <div>
             <p className="text-primary text-sm font-medium uppercase tracking-wider">Selected work</p>
-            <h2 className="font-heading mt-3 text-3xl font-semibold sm:text-4xl">A few things I&apos;ve helped shape.</h2>
+            <h2 className="font-heading mt-3 text-3xl font-semibold sm:text-4xl"><TextReveal text="A few things I've helped shape." /></h2>
           </div>
           <Link href="/work" className="text-primary hidden items-center gap-2 text-sm font-medium hover:underline sm:inline-flex">
             See all work <ArrowRight className="size-4" />
           </Link>
-        </div>
+        </Reveal>
         <div className="space-y-8">
-          {featuredWork.map((project) => (
-            <Card key={project.title} className="overflow-visible p-2 sm:p-3">
+          {featuredWork.map((project, index) => (
+            <Reveal key={project.title} delay={index * 0.1}>
+            <Card className="overflow-visible p-2 transition-shadow duration-300 hover:shadow-xl sm:p-3">
               <ProjectCarousel slides={project.slides} />
               <CardContent className="px-3 pt-7 pb-4 sm:px-5 sm:pb-5">
                 <p className="text-muted-foreground text-sm">{project.category}</p>
@@ -96,15 +107,16 @@ export default function Page() {
                 </Link>
               </CardContent>
             </Card>
+            </Reveal>
           ))}
         </div>
       </section>
 
       <section className="mx-auto max-w-7xl px-4 pt-28 lg:px-8">
-        <div className="grid gap-10 lg:grid-cols-[0.7fr_1.3fr]">
+        <Reveal className="grid gap-10 lg:grid-cols-[0.7fr_1.3fr]">
           <div>
             <p className="text-primary text-sm font-medium uppercase tracking-wider">Services</p>
-            <h2 className="font-heading mt-3 max-w-sm text-3xl font-semibold sm:text-4xl">The right kind of help for the next stage.</h2>
+            <h2 className="font-heading mt-3 max-w-sm text-3xl font-semibold sm:text-4xl"><TextReveal text="The right kind of help for the next stage." /></h2>
             <Link href="/services" className="text-primary mt-6 inline-flex items-center gap-2 text-sm font-medium hover:underline">
               Explore all services <ArrowRight className="size-4" />
             </Link>
@@ -119,11 +131,11 @@ export default function Page() {
               </Link>
             ))}
           </div>
-        </div>
+        </Reveal>
       </section>
 
       <section className="mx-auto max-w-7xl px-4 pt-28 lg:px-8">
-        <div className="border-border border-t pt-10">
+        <Reveal className="border-border border-t pt-10">
           <p className="text-primary text-sm font-medium uppercase tracking-wider">Working together</p>
           <div className="mt-8 grid gap-8 md:grid-cols-3">
             {process.map(([number, title, description]) => (
@@ -134,15 +146,15 @@ export default function Page() {
               </div>
             ))}
           </div>
-        </div>
+        </Reveal>
       </section>
 
       <section className="mx-auto max-w-7xl px-4 pt-28 lg:px-8">
-        <div className="border-border border-t pt-10">
+        <Reveal className="border-border border-t pt-10">
           <p className="text-primary text-sm font-medium uppercase tracking-wider">The studio</p>
           <div className="mt-5 grid gap-12 lg:grid-cols-[1fr_0.8fr] lg:items-start">
             <div>
-              <h2 className="font-heading max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl">A hands-on design partner for work that matters.</h2>
+              <h2 className="font-heading max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl"><TextReveal text="A hands-on design partner for work that matters." /></h2>
               <p className="text-muted-foreground mt-6 max-w-2xl text-lg leading-8">I lead the work from the first question through the final detail, bringing strategy, design, and development together around what needs to change.</p>
               <Link href="/about" className="text-primary mt-7 inline-flex items-center gap-2 text-sm font-medium hover:underline">
                 More about me <ArrowRight className="size-4" />
@@ -166,7 +178,7 @@ export default function Page() {
               </div>
             ))}
           </div>
-        </div>
+        </Reveal>
       </section>
 
       <CTASection />

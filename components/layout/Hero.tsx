@@ -2,6 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
+import { TextReveal } from "@/components/motion/text-reveal"
 
 export default function HeroSection() {
   return (
@@ -10,7 +11,7 @@ export default function HeroSection() {
         <div className="max-w-5xl">
           <p className="text-primary text-sm font-medium uppercase tracking-wider">About the studio</p>
           <h1 className="font-heading mt-5 max-w-5xl text-5xl leading-tight font-semibold tracking-tight text-balance sm:text-6xl lg:text-7xl">
-            Thoughtful digital work, from first idea to final detail.
+            <TextReveal text="Thoughtful digital work, from first idea to final detail." />
           </h1>
         </div>
 
