@@ -1,32 +1,23 @@
-import * as React from "react";
+import * as React from "react"
 
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious
-} from "@/components/ui/carousel";
-
-export default function CarouselDemo() {
-  return (
-    <Carousel className="w-full max-w-xs">
-      <CarouselContent>
-        {Array.from({ length: 5 }).map((_, index) => (
-          <CarouselItem key={index}>
-            <div className="p-1">
-              <Card>
-                <CardContent className="flex aspect-square items-center justify-center p-6">
-                  <span className="text-4xl font-semibold">{index + 1}</span>
-                </CardContent>
-              </Card>
-            </div>
-          </CarouselItem>
-        ))}
-      </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
-    </Carousel>
-  );
+function Carousel({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return <div className={className} {...props} />
 }
+
+function CarouselContent({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
+  return <div className={className} {...props} />
+}
+
+function CarouselItem({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
+  return <div className={className} {...props} />
+}
+
+function CarouselPrevious({ className, ...props }: React.ComponentPropsWithoutRef<"button">) {
+  return <button type="button" className={className} {...props} aria-label="Previous slide" />
+}
+
+function CarouselNext({ className, ...props }: React.ComponentPropsWithoutRef<"button">) {
+  return <button type="button" className={className} {...props} aria-label="Next slide" />
+}
+
+export { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious }
