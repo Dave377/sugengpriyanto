@@ -194,7 +194,7 @@ export default function ProjectIntakeForm() {
     if (step === "brief" && answers.brief.trim().length < 10) return "A few sentences about the project will help a lot."
     if (step === "contact") {
       if (!answers.contact.name.trim()) return "Please enter your name."
-      if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(answers.contact.email.trim())) return "Please enter a valid email."
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(answers.contact.email.trim())) return "Please enter a valid email."
       if (!answers.contact.consent) return "Please confirm that I can use these details to reply."
     }
     return ""
@@ -213,8 +213,8 @@ export default function ProjectIntakeForm() {
 
   const next = () => {
     const validation = validate()
+    setError(validation)
     if (validation) {
-      setError(validation)
       return
     }
     if (step === "start") return go("type")
