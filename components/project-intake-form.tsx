@@ -72,6 +72,7 @@ const emptyAnswers = (): Answers => ({
 })
 
 const STORAGE_KEY = "project-questionnaire-v2"
+const INQUIRY_EMAIL = "hello@sugengpriyanto.my.id"
 
 function flowFor(answers: Answers): StepId[] {
   const flow: StepId[] = ["type", "goal", "features"]
@@ -250,7 +251,7 @@ export default function ProjectIntakeForm() {
       "Company: " + (answers.contact.company || "Not provided"),
       "Preferred contact: " + (answers.contact.method ?? "Email"),
     ].join("\\n\\n")
-    window.location.href = "mailto:hello@sugeng.dev?subject=" + encodeURIComponent("New project inquiry from " + answers.contact.name) + "&body=" + encodeURIComponent(body)
+    window.location.href = "mailto:" + INQUIRY_EMAIL + "?subject=" + encodeURIComponent("New project inquiry from " + answers.contact.name) + "&body=" + encodeURIComponent(body)
     localStorage.removeItem(STORAGE_KEY)
     setSubmitted(true)
     go("success")
