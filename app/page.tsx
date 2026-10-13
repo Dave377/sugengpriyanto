@@ -58,11 +58,11 @@ export default function Page() {
             I help thoughtful teams turn early ideas, growing products, and ambitious redesigns into experiences people understand and want to use.
           </p>
           <div className="mt-9 flex flex-wrap items-center gap-3">
-            <Button size="lg" render={<Link href="/work" />} nativeButton={false}>
-              View selected work <ArrowUpRight className="size-4" />
+            <Button size="lg" render={<Link href="/start-project" />} nativeButton={false}>
+              Start a project <ArrowRight className="size-4" />
             </Button>
-            <Button variant="outline" render={<Link href="/start-project" />} nativeButton={false}>
-              Start a conversation <ArrowRight className="size-4" />
+            <Button variant="outline" size="lg" render={<Link href="/work" />} nativeButton={false}>
+              View selected work <ArrowUpRight className="size-4" />
             </Button>
           </div>
           <p className="text-muted-foreground mt-10 flex items-center gap-2 text-sm">

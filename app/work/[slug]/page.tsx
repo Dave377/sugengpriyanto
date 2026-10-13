@@ -158,9 +158,9 @@ export default async function WorkCaseStudyPage({ params }: { params: Promise<{ 
             <h2 className="font-heading text-3xl font-semibold">Have a project in mind?</h2>
             <p className="text-muted-foreground mt-2">Tell me where you want to go, and we&apos;ll map the next step.</p>
           </div>
-          <Link href="mailto:hello@sugeng.dev" className="bg-primary text-primary-foreground inline-flex w-fit items-center gap-2 rounded-full px-5 py-3 text-sm font-medium">
-            Start a conversation <ArrowRight className="size-4" />
-          </Link>
+          <Button size="lg" render={<Link href="/start-project" />} nativeButton={false}>
+            Start a project
+          </Button>
         </div>
       </section>*/}
 

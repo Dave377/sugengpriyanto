@@ -1,195 +1,98 @@
 "use client"
 
-import { useMemo, useState, type ReactNode } from "react"
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react"
 import Link from "next/link"
 import { ArrowLeft, ArrowRight, Check, Send } from "lucide-react"
 
+import * as C from "@/questionnaire-sample/config"
 import { Button } from "@/components/ui/button"
 
-type Choice = { value: string; label: string; description?: string }
+type StepId =
+  | "start" | "type" | "goal" | "features" | "relation" | "management" | "customization"
+  | "status" | "design" | "team" | "brief" | "references" | "timeline" | "budget"
+  | "compat" | "mvp" | "contact" | "review" | "success"
 
-type IntakeData = {
-  projectType: string
-  objectives: string[]
+type Answers = {
+  projectType?: C.ProjectType
+  goal?: string
+  goalOther: string
   features: string[]
-  audience: string
-  startingPoint: string[]
-  management: string
-  team: string
-  timeline: string
-  budget: string
-  budgetPlan: string
+  featuresOther: string
+  notSureDescription: string
+  webMobileRelation?: string
+  management?: string
+  customization?: string
+  status: string[]
+  statusOther: string
+  currentUrl: string
+  design?: string
+  team?: string
+  teamOther: string
   brief: string
-  name: string
-  email: string
-  company: string
-  reference: string
+  references: { url: string; note: string }[]
+  timeline?: string
+  deadlineReason: string
+  targetDate: string
+  budget?: string
+  mvpUsed: boolean
+  mvpEssential: string[]
+  mvpFuture: string[]
+  scopeAdjusted: boolean
+  contact: {
+    name: string
+    email: string
+    company: string
+    role: string
+    country: string
+    timezone: string
+    method?: string
+    methodDetail: string
+    consent: boolean
+  }
 }
 
-const initialData: IntakeData = {
-  projectType: "",
-  objectives: [],
+const emptyAnswers = (): Answers => ({
+  goalOther: "",
   features: [],
-  audience: "",
-  startingPoint: [],
-  management: "",
-  team: "",
-  timeline: "",
-  budget: "",
-  budgetPlan: "",
+  featuresOther: "",
+  notSureDescription: "",
+  status: [],
+  statusOther: "",
+  currentUrl: "",
+  teamOther: "",
   brief: "",
-  name: "",
-  email: "",
-  company: "",
-  reference: "",
+  references: [],
+  deadlineReason: "",
+  targetDate: "",
+  mvpUsed: false,
+  mvpEssential: [],
+  mvpFuture: [],
+  scopeAdjusted: false,
+  contact: { name: "", email: "", company: "", role: "", country: "", timezone: "", methodDetail: "", consent: false },
+})
+
+const STORAGE_KEY = "project-questionnaire-v2"
+
+function flowFor(answers: Answers): StepId[] {
+  const flow: StepId[] = ["type", "goal", "features"]
+  if (answers.projectType === "saasMobile") flow.push("relation")
+  flow.push("management", "customization", "status", "design", "team", "brief", "references", "timeline", "budget", "contact", "review")
+  return flow
 }
 
-const projectTypes: Choice[] = [
-  { value: "landing-page", label: "Landing page", description: "A focused page for one offer, launch, or campaign." },
-  { value: "marketing-website", label: "Marketing website", description: "A complete website for your business or organization." },
-  { value: "web-app", label: "Web application", description: "A product people use to complete tasks or manage information." },
-  { value: "mobile-app", label: "Mobile application", description: "An experience designed for iOS, Android, or both." },
-  { value: "website-and-app", label: "Website and app", description: "A public-facing website plus a logged-in product experience." },
-  { value: "not-sure", label: "I'm not sure yet", description: "I have a problem or idea and need help shaping the right format." },
-]
-
-const objectiveOptions: Record<string, Choice[]> = {
-  "landing-page": [
-    { value: "launch-offer", label: "Launch a new offer" },
-    { value: "generate-leads", label: "Generate more leads" },
-    { value: "validate-idea", label: "Validate an idea" },
-    { value: "campaign", label: "Support a campaign or event" },
-  ],
-  "marketing-website": [
-    { value: "launch-business", label: "Launch a new business" },
-    { value: "improve-presence", label: "Improve our online presence" },
-    { value: "generate-leads", label: "Generate more leads" },
-    { value: "replace-site", label: "Replace an outdated website" },
-  ],
-  "web-app": [
-    { value: "validate-product", label: "Validate a product idea" },
-    { value: "launch-product", label: "Launch a new product" },
-    { value: "improve-product", label: "Improve an existing product" },
-    { value: "streamline-work", label: "Streamline an internal workflow" },
-  ],
-  "mobile-app": [
-    { value: "validate-product", label: "Validate a product idea" },
-    { value: "launch-product", label: "Launch a new app" },
-    { value: "improve-product", label: "Improve an existing app" },
-    { value: "reach-users", label: "Reach users on mobile" },
-  ],
-  "website-and-app": [
-    { value: "launch-product", label: "Launch a new product" },
-    { value: "connect-experience", label: "Connect our website and product" },
-    { value: "improve-product", label: "Improve an existing product" },
-    { value: "build-business", label: "Build a digital business" },
-  ],
-  "not-sure": [
-    { value: "shape-idea", label: "Shape an early idea" },
-    { value: "find-direction", label: "Find the right direction" },
-    { value: "launch-business", label: "Launch a new business" },
-    { value: "solve-problem", label: "Solve a specific business problem" },
-  ],
-}
-
-const featureOptions: Record<string, Choice[]> = {
-  "landing-page": [
-    { value: "contact-form", label: "Contact or inquiry form" },
-    { value: "cms", label: "Easy content editing" },
-    { value: "analytics", label: "Analytics and conversion tracking" },
-    { value: "payments", label: "Payments or checkout" },
-    { value: "integrations", label: "Third-party integrations" },
-    { value: "unsure", label: "I'm not sure yet" },
-  ],
-  "marketing-website": [
-    { value: "cms", label: "Easy content editing" },
-    { value: "blog", label: "Blog or resources" },
-    { value: "contact-form", label: "Contact or inquiry form" },
-    { value: "multilingual", label: "Multiple languages" },
-    { value: "integrations", label: "Third-party integrations" },
-    { value: "unsure", label: "I'm not sure yet" },
-  ],
-  "web-app": [
-    { value: "accounts", label: "User accounts and permissions" },
-    { value: "dashboard", label: "Dashboard or admin area" },
-    { value: "payments", label: "Payments or subscriptions" },
-    { value: "search", label: "Search, filters, or data tables" },
-    { value: "integrations", label: "Third-party integrations" },
-    { value: "unsure", label: "I'm not sure yet" },
-  ],
-  "mobile-app": [
-    { value: "accounts", label: "User accounts and profiles" },
-    { value: "notifications", label: "Push notifications" },
-    { value: "payments", label: "Payments or subscriptions" },
-    { value: "location", label: "Location or maps" },
-    { value: "integrations", label: "Third-party integrations" },
-    { value: "unsure", label: "I'm not sure yet" },
-  ],
-  "website-and-app": [
-    { value: "accounts", label: "User accounts and permissions" },
-    { value: "cms", label: "Easy content editing" },
-    { value: "dashboard", label: "Dashboard or admin area" },
-    { value: "payments", label: "Payments or subscriptions" },
-    { value: "integrations", label: "Third-party integrations" },
-    { value: "unsure", label: "I'm not sure yet" },
-  ],
-  "not-sure": [
-    { value: "contact-form", label: "A way to collect inquiries" },
-    { value: "accounts", label: "User accounts or member area" },
-    { value: "payments", label: "Payments or selling online" },
-    { value: "cms", label: "Easy content editing" },
-    { value: "integrations", label: "Connecting existing tools" },
-    { value: "unsure", label: "I'm not sure yet" },
-  ],
-}
-
-const startingPointOptions: Choice[] = [
-  { value: "idea", label: "Just a written idea" },
-  { value: "brief", label: "A project brief" },
-  { value: "figma", label: "Figma designs" },
-  { value: "brand", label: "Brand assets and content" },
-  { value: "ai-code", label: "AI-generated codebase" },
-  { value: "existing-code", label: "An existing codebase" },
-  { value: "nothing", label: "Nothing yet" },
-]
-
-const managementOptions: Choice[] = [
-  { value: "self", label: "I want to edit it myself" },
-  { value: "team", label: "My team will manage it" },
-  { value: "support", label: "I'd like ongoing support" },
-  { value: "unsure", label: "I'm not sure yet" },
-]
-
-const timelineOptions: Choice[] = [
-  { value: "urgent", label: "As soon as possible" },
-  { value: "one-two-months", label: "Within 1–2 months" },
-  { value: "three-six-months", label: "Within 3–6 months" },
-  { value: "flexible", label: "I'm flexible" },
-  { value: "exploring", label: "I'm only exploring" },
-]
-
-const budgetOptions: Choice[] = [
-  { value: "under-1000", label: "Under $1,000" },
-  { value: "1000-2500", label: "$1,000–$2,500" },
-  { value: "2500-5000", label: "$2,500–$5,000" },
-  { value: "5000-10000", label: "$5,000–$10,000" },
-  { value: "over-10000", label: "$10,000+" },
-  { value: "unsure", label: "I'm not sure yet" },
-]
-
-function ChoiceGrid({ options, selected, multiple = false, onSelect }: { options: Choice[]; selected: string | string[]; multiple?: boolean; onSelect: (value: string) => void }) {
+function ChoiceGrid({ options, value, values, multiple = false, onChange }: { options: C.Option[]; value?: string; values?: string[]; multiple?: boolean; onChange: (value: string) => void }) {
   return (
     <div className="grid gap-3 sm:grid-cols-2">
       {options.map((option) => {
-        const isSelected = multiple ? selected.includes(option.value) : selected === option.value
-        const className = isSelected
+        const selected = multiple ? values?.includes(option.value) : value === option.value
+        const className = selected
           ? "border-primary bg-primary/5 ring-primary/20 rounded-xl border p-4 text-left ring-2 transition-colors"
           : "border-border hover:border-primary/50 hover:bg-muted/50 rounded-xl border p-4 text-left transition-colors"
         return (
-          <button key={option.value} type="button" onClick={() => onSelect(option.value)} className={className}>
+          <button key={option.value} type="button" onClick={() => onChange(option.value)} className={className}>
             <span className="flex items-start justify-between gap-3">
               <span className="font-medium">{option.label}</span>
-              {isSelected && <Check className="text-primary mt-0.5 size-4 shrink-0" />}
+              {selected && <Check className="text-primary mt-0.5 size-4 shrink-0" />}
             </span>
             {option.description && <span className="text-muted-foreground mt-2 block text-sm leading-6">{option.description}</span>}
           </button>
@@ -199,130 +102,232 @@ function ChoiceGrid({ options, selected, multiple = false, onSelect }: { options
   )
 }
 
+function TextField({ label, value, onChange, placeholder, type = "text", required = false }: { label: string; value: string; onChange: (value: string) => void; placeholder?: string; type?: string; required?: boolean }) {
+  return (
+    <label className="grid gap-2 text-sm font-medium">
+      {label}{required && " *"}
+      <input type={type} value={value} required={required} onChange={(event) => onChange(event.target.value)} placeholder={placeholder} className="border-border bg-background focus:border-primary focus:ring-primary/20 h-11 rounded-lg border px-3 font-normal outline-none focus:ring-2" />
+    </label>
+  )
+}
+
+function TextArea({ label, value, onChange, placeholder, rows = 6 }: { label: string; value: string; onChange: (value: string) => void; placeholder?: string; rows?: number }) {
+  return (
+    <label className="grid gap-2 text-sm font-medium">
+      {label}
+      <textarea value={value} onChange={(event) => onChange(event.target.value)} placeholder={placeholder} rows={rows} className="border-border bg-background focus:border-primary focus:ring-primary/20 w-full resize-y rounded-xl border p-4 font-normal outline-none focus:ring-2" />
+    </label>
+  )
+}
+
+function Question({ title, help, children }: { title: string; help?: string; children: ReactNode }) {
+  return (
+    <div>
+      <h2 className="font-heading text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h2>
+      {help && <p className="text-muted-foreground mt-3 max-w-2xl leading-7">{help}</p>}
+      <div className="mt-8">{children}</div>
+    </div>
+  )
+}
+
 export default function ProjectIntakeForm() {
-  const [step, setStep] = useState(0)
-  const [data, setData] = useState<IntakeData>(initialData)
+  const [answers, setAnswers] = useState<Answers>(emptyAnswers)
+  const [step, setStep] = useState<StepId>("start")
+  const [hydrated, setHydrated] = useState(false)
+  const [error, setError] = useState("")
   const [submitted, setSubmitted] = useState(false)
-  const totalSteps = 12
-  const objectives = useMemo(() => objectiveOptions[data.projectType] ?? objectiveOptions["not-sure"], [data.projectType])
-  const features = useMemo(() => featureOptions[data.projectType] ?? featureOptions["not-sure"], [data.projectType])
+  const containerRef = useRef<HTMLDivElement>(null)
 
-  const update = <K extends keyof IntakeData>(key: K, value: IntakeData[K]) => {
-    setData((current) => ({ ...current, [key]: value }))
+  useEffect(() => {
+    let restoreTimer: number | undefined
+    const hydrationTimer = window.setTimeout(() => setHydrated(true), 0)
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY)
+      if (saved) {
+        const parsed = JSON.parse(saved) as { answers?: Partial<Answers>; step?: StepId }
+        restoreTimer = window.setTimeout(() => {
+          setAnswers({ ...emptyAnswers(), ...parsed.answers, contact: { ...emptyAnswers().contact, ...parsed.answers?.contact } })
+          if (parsed.step && parsed.step !== "success") setStep(parsed.step)
+        }, 0)
+      }
+    } catch {
+      // Ignore invalid saved progress.
+    }
+    return () => {
+      if (restoreTimer) window.clearTimeout(restoreTimer)
+      window.clearTimeout(hydrationTimer)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (hydrated && step !== "success") localStorage.setItem(STORAGE_KEY, JSON.stringify({ answers, step }))
+  }, [answers, hydrated, step])
+
+  useEffect(() => {
+    containerRef.current?.querySelector<HTMLElement>("[data-step-heading]")?.focus({ preventScroll: true })
+    containerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+  }, [step])
+
+  const flow = useMemo(() => flowFor(answers), [answers])
+  const progressIndex = flow.indexOf(step)
+  const progress = step === "start" ? 0 : step === "success" ? 100 : Math.max(5, Math.round(((progressIndex + 1) / flow.length) * 100))
+  const featureOptions = answers.projectType ? C.features[answers.projectType] : []
+  const budgetOptions = answers.projectType ? C.budgetRanges[answers.projectType] : []
+
+  const update = <K extends keyof Answers>(key: K, value: Answers[K]) => setAnswers((current) => ({ ...current, [key]: value }))
+  const updateContact = (key: keyof Answers["contact"], value: string | boolean) => setAnswers((current) => ({ ...current, contact: { ...current.contact, [key]: value } }))
+  const toggle = (key: "features" | "status", value: string) => setAnswers((current) => ({ ...current, [key]: current[key].includes(value) ? current[key].filter((item) => item !== value) : [...current[key], value] }))
+
+  const go = (nextStep: StepId) => {
+    setError("")
+    setStep(nextStep)
   }
 
-  const toggle = (key: "objectives" | "features" | "startingPoint", value: string) => {
-    setData((current) => ({
-      ...current,
-      [key]: current[key].includes(value) ? current[key].filter((item) => item !== value) : [...current[key], value],
-    }))
+  const validate = () => {
+    if (step === "type" && !answers.projectType) return "Choose the option closest to your project."
+    if (step === "goal" && !answers.goal) return "Choose the main goal."
+    if (step === "goal" && answers.goal === C.OTHER && !answers.goalOther.trim()) return "Tell me a little more about the goal."
+    if (step === "features" && answers.projectType !== "notSure" && answers.features.length === 0) return "Choose at least one feature, or select that you are not sure yet."
+    if (step === "features" && answers.projectType === "notSure" && !answers.notSureDescription.trim() && answers.features.length === 0) return "A sentence or two is enough to describe the idea."
+    if (step === "brief" && answers.brief.trim().length < 10) return "A few sentences about the project will help a lot."
+    if (step === "contact") {
+      if (!answers.contact.name.trim()) return "Please enter your name."
+      if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(answers.contact.email.trim())) return "Please enter a valid email."
+      if (!answers.contact.consent) return "Please confirm that I can use these details to reply."
+    }
+    return ""
   }
 
-  const canContinue = [
-    Boolean(data.projectType),
-    data.objectives.length > 0,
-    data.features.length > 0,
-    data.audience.trim().length > 2,
-    data.startingPoint.length > 0,
-    Boolean(data.management),
-    Boolean(data.team),
-    Boolean(data.timeline),
-    Boolean(data.budget) && (data.budget !== "under-1000" || Boolean(data.budgetPlan)),
-    data.brief.trim().length > 15,
-    data.name.trim().length > 1 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email),
-    true,
-  ][step]
+  const budgetStatus = () => {
+    if (!answers.projectType || !answers.budget || answers.budget === C.BUDGET_UNSURE || answers.budget === C.BUDGET_FLEXIBLE) return "unknown"
+    const selected = budgetOptions.find((option) => option.value === answers.budget)
+    if (!selected?.max) return "unknown"
+    const base: Record<C.ProjectType, number> = { website: 1500, ecommerce: 2500, mobile: 5000, saas: 6000, saasMobile: 12000, notSure: 4000 }
+    const estimate = base[answers.projectType] + answers.features.length * 450
+    if (selected.max >= estimate) return "reasonable"
+    if (selected.max >= estimate * 0.6) return "potentially_low"
+    return "significantly_below"
+  }
 
   const next = () => {
-    if (canContinue && step < totalSteps - 1) setStep((current) => current + 1)
+    const validation = validate()
+    if (validation) {
+      setError(validation)
+      return
+    }
+    if (step === "start") return go("type")
+    if (step === "budget") return go(budgetStatus() === "significantly_below" ? "compat" : "contact")
+    const index = flow.indexOf(step)
+    go(flow[index + 1] ?? "review")
   }
 
-  const previous = () => setStep((current) => Math.max(0, current - 1))
+  const back = () => {
+    if (step === "compat") return go("budget")
+    if (step === "mvp") return go("compat")
+    const index = flow.indexOf(step)
+    go(index <= 0 ? "start" : flow[index - 1] ?? "start")
+  }
 
   const submit = () => {
+    const type = C.projectTypes.find((item) => item.value === answers.projectType)?.label ?? "Not specified"
+    const goal = answers.goal === C.OTHER ? answers.goalOther : C.goals.find((item) => item.value === answers.goal)?.label
+    const features = answers.features.map((value) => featureOptions.find((item) => item.value === value)?.label ?? value).join(", ")
     const body = [
-      "Project type: " + data.projectType,
-      "Main goals: " + data.objectives.join(", "),
-      "Features: " + data.features.join(", "),
-      "Audience: " + data.audience,
-      "Starting point: " + data.startingPoint.join(", "),
-      "Website management: " + data.management,
-      "People involved: " + data.team,
-      "Timeline: " + data.timeline,
-      "Budget: " + data.budget,
-      data.budgetPlan ? "Budget direction: " + data.budgetPlan : "",
-      "Project brief: " + data.brief,
-      "Name: " + data.name,
-      "Email: " + data.email,
-      "Company or project: " + (data.company || "Not provided"),
-      "Reference: " + (data.reference || "Not provided"),
-    ].filter(Boolean).join("\n\n")
-
-    const subject = encodeURIComponent("New project inquiry from " + data.name)
-    window.location.href = "mailto:hello@sugeng.dev?subject=" + subject + "&body=" + encodeURIComponent(body)
+      "Project type: " + type,
+      "Main goal: " + (goal ?? "Not specified"),
+      "Features: " + (features || answers.notSureDescription),
+      "Management: " + (C.management.find((item) => item.value === answers.management)?.label ?? "Not specified"),
+      "Customization: " + (C.customization.find((item) => item.value === answers.customization)?.label ?? "Not specified"),
+      "Starting with: " + answers.status.map((value) => C.startingWith.find((item) => item.value === value)?.label ?? value).join(", "),
+      "Design status: " + (C.designStatus.find((item) => item.value === answers.design)?.label ?? "Not specified"),
+      "Team: " + (C.team.find((item) => item.value === answers.team)?.label ?? "Not specified"),
+      "Brief: " + answers.brief,
+      "References: " + answers.references.map((reference) => reference.url + (reference.note ? " — " + reference.note : "")).join(", "),
+      "Timeline: " + (C.timelines.find((item) => item.value === answers.timeline)?.label ?? "Not specified"),
+      "Budget: " + (budgetOptions.find((item) => item.value === answers.budget)?.label ?? "Not specified"),
+      "Name: " + answers.contact.name,
+      "Email: " + answers.contact.email,
+      "Company: " + (answers.contact.company || "Not provided"),
+      "Preferred contact: " + (answers.contact.method ?? "Email"),
+    ].join("\\n\\n")
+    window.location.href = "mailto:hello@sugeng.dev?subject=" + encodeURIComponent("New project inquiry from " + answers.contact.name) + "&body=" + encodeURIComponent(body)
+    localStorage.removeItem(STORAGE_KEY)
     setSubmitted(true)
+    go("success")
   }
 
-  if (submitted) {
+  const reset = () => {
+    localStorage.removeItem(STORAGE_KEY)
+    setAnswers(emptyAnswers())
+    setError("")
+    go("start")
+  }
+
+  if (submitted || step === "success") {
     return (
       <div className="border-border rounded-2xl border p-8 text-center sm:p-12">
         <div className="bg-primary/10 text-primary mx-auto flex size-12 items-center justify-center rounded-full"><Check className="size-6" /></div>
-        <h2 className="font-heading mt-6 text-3xl font-semibold">Your project brief is ready.</h2>
-        <p className="text-muted-foreground mx-auto mt-3 max-w-md leading-7">Your email app should open with the answers attached. Send it when you&apos;re ready, and I&apos;ll review everything before getting back to you.</p>
+        <h2 className="font-heading mt-6 text-3xl font-semibold">Your project brief is in.</h2>
+        <p className="text-muted-foreground mx-auto mt-3 max-w-md leading-7">Your email app should open with the answers attached. Send it when you&apos;re ready, and I&apos;ll review the project before getting back to you.</p>
         <Button className="mt-7" render={<Link href="/" />} nativeButton={false}>Back to homepage</Button>
       </div>
     )
   }
 
+  const currentFeatureValues = answers.projectType === "notSure" ? answers.features : answers.features
+
   return (
-    <div className="border-border rounded-2xl border p-5 sm:p-8 lg:p-10">
-      <div className="mb-10">
-        <div className="flex items-center justify-between gap-4 text-sm"><span className="text-muted-foreground">Project brief</span><span className="font-mono">{String(step + 1).padStart(2, "0")} / {String(totalSteps).padStart(2, "0")}</span></div>
-        <div className="bg-muted mt-4 h-1 overflow-hidden rounded-full"><div className="bg-primary h-full transition-all" style={{ width: ((step + 1) / totalSteps) * 100 + "%" }} /></div>
+    <div ref={containerRef} className="border-border scroll-mt-24 rounded-2xl border p-5 sm:p-8 lg:p-10">
+      {step !== "start" && (
+        <div className="mb-10">
+          <div className="flex items-center justify-between gap-4 text-sm">
+            <span className="text-muted-foreground">Project brief · {progress}%</span>
+            <span className="font-mono">{String(progress).padStart(3, "0")}</span>
+          </div>
+          <div className="bg-muted mt-4 h-1 overflow-hidden rounded-full"><div className="bg-primary h-full transition-all" style={{ width: progress + "%" }} /></div>
+        </div>
+      )}
+
+      <div className="min-h-[34rem]">
+        {step === "start" && <Question title="Tell me about your project." help="Answer a few practical questions about what you&apos;re building, your goals, timeline, and budget. This gives us a useful starting point before we speak."><div className="flex flex-wrap items-center gap-4"><Button type="button" onClick={next}>{answers.projectType ? "Continue where you left off" : "Start questionnaire"} <ArrowRight className="size-4" /></Button><span className="text-muted-foreground text-sm">Takes about 3–7 minutes.</span></div>{answers.projectType && <button type="button" onClick={reset} className="text-muted-foreground mt-6 text-sm underline underline-offset-4">Start over</button>}</Question>}
+        {step === "type" && <Question title="What are you looking to build?" help="Choose the closest fit. You can explain the details later."><ChoiceGrid options={C.projectTypes} value={answers.projectType} onChange={(value) => setAnswers((current) => ({ ...current, projectType: value as C.ProjectType, features: current.projectType === value ? current.features : [], budget: current.projectType === value ? current.budget : undefined }))} /></Question>}
+        {step === "goal" && <Question title="What is the main goal of this project?" help="Choose the outcome that matters most right now."><ChoiceGrid options={C.goals} value={answers.goal} onChange={(value) => update("goal", value)} />{answers.goal === C.OTHER && <div className="mt-5"><TextField label="Tell me a little more" value={answers.goalOther} onChange={(value) => update("goalOther", value)} /></div>}</Question>}
+        {step === "features" && <Question title={answers.projectType ? C.featureQuestion[answers.projectType] : "What should the product be able to do?"} help={answers.projectType === "notSure" ? "Describe the idea in your own words, then optionally choose anything that sounds relevant." : "Select everything that applies. If you&apos;re unsure, that&apos;s completely fine."}>{answers.projectType === "notSure" && <TextArea label="In your own words" value={answers.notSureDescription} onChange={(value) => update("notSureDescription", value)} placeholder="Example: Customers should be able to create an account, choose a subscription, upload documents, and track their progress." rows={5} />}<div className={answers.projectType === "notSure" ? "mt-8" : ""}><ChoiceGrid options={featureOptions} values={currentFeatureValues} multiple onChange={(value) => toggle("features", value)} /></div>{answers.features.includes(C.OTHER) && <div className="mt-5"><TextField label="Describe the other feature or requirement" value={answers.featuresOther} onChange={(value) => update("featuresOther", value)} /></div>}</Question>}
+        {step === "relation" && <Question title="How closely should the web and mobile experiences match?"><ChoiceGrid options={C.webMobileRelation} value={answers.webMobileRelation} onChange={(value) => update("webMobileRelation", value)} /></Question>}
+        {step === "management" && <Question title="How would you like to manage the project after launch?" help="This helps me recommend the right setup and level of support."><ChoiceGrid options={C.management} value={answers.management} onChange={(value) => update("management", value)} /></Question>}
+        {step === "customization" && <Question title="How custom does the experience need to be?" help="There is no wrong answer. This helps me understand the expected level of design and functionality."><ChoiceGrid options={C.customization} value={answers.customization} onChange={(value) => update("customization", value)} /></Question>}
+        {step === "status" && <Question title="What are you starting with?" help="Select everything you already have."><ChoiceGrid options={C.startingWith} values={answers.status} multiple onChange={(value) => toggle("status", value)} />{answers.status.includes(C.OTHER) && <div className="mt-5"><TextField label="What else do you have?" value={answers.statusOther} onChange={(value) => update("statusOther", value)} /></div>}{answers.status.some((value) => C.existingProductValues.includes(value)) && <div className="mt-5"><TextField label="Current URL (optional)" value={answers.currentUrl} onChange={(value) => update("currentUrl", value)} placeholder="https://" /></div>}</Question>}
+        {step === "design" && <Question title="What is the current design status?"><ChoiceGrid options={C.designStatus} value={answers.design} onChange={(value) => update("design", value)} /></Question>}
+        {step === "team" && <Question title="Who is currently involved in the project?" help="Knowing the decision-making group helps me plan communication."><ChoiceGrid options={C.team} value={answers.team} onChange={(value) => update("team", value)} />{answers.team === C.OTHER && <div className="mt-5"><TextField label="Who else is involved?" value={answers.teamOther} onChange={(value) => update("teamOther", value)} /></div>}</Question>}
+        {step === "brief" && <Question title="Tell me about the project in your own words." help="What are you building, who is it for, and what should someone be able to accomplish with it?"><TextArea label="Project description" value={answers.brief} onChange={(value) => update("brief", value)} placeholder="Share the context, problem, constraints, and what success would look like." rows={8} /><div className="text-muted-foreground mt-5 text-sm"><p className="mb-2">Some prompts if helpful:</p><ul className="grid gap-1 sm:grid-cols-2">{["Who will use it?", "What problem does it solve?", "What is the most important workflow?", "What would make the project successful?"].map((prompt) => <li key={prompt}>— {prompt}</li>)}</ul></div></Question>}
+        {step === "references" && <Question title="Any websites, apps, or products you&apos;d like me to reference?" help="Optional — skip this step if nothing comes to mind."><div className="grid gap-5"><TextField label="Link" value={answers.references[0]?.url ?? ""} onChange={(value) => update("references", [{ url: value, note: answers.references[0]?.note ?? "" }])} placeholder="https://" /><TextField label="What should I notice? (optional)" value={answers.references[0]?.note ?? ""} onChange={(value) => update("references", [{ url: answers.references[0]?.url ?? "", note: value }])} placeholder="For example: I like the navigation or visual style." /></div></Question>}
+        {step === "timeline" && <Question title="When would you ideally like to launch?" help="A rough timeframe is enough at this stage."><ChoiceGrid options={C.timelines} value={answers.timeline} onChange={(value) => update("timeline", value)} />{answers.timeline === "asap" && <div className="mt-5"><TextArea label="Is there a specific deadline or event?" value={answers.deadlineReason} onChange={(value) => update("deadlineReason", value)} rows={3} /></div>}</Question>}
+        {step === "budget" && <Question title="What investment range are you considering?" help="A rough range is fine. It helps me suggest a scope and approach that fit."><ChoiceGrid options={budgetOptions} value={answers.budget} onChange={(value) => update("budget", value)} /></Question>}
+        {step === "compat" && <Question title="This scope may be difficult to deliver within that budget." help="That does not necessarily mean the project cannot move forward. We can reduce the first phase, start with an MVP, or adjust the budget."><div className="grid gap-3"><button type="button" onClick={() => go("budget")} className="border-border hover:border-primary/50 rounded-xl border p-4 text-left"><span className="font-medium">Adjust the budget</span><span className="text-muted-foreground mt-1 block text-sm">I can revisit the investment range.</span></button><button type="button" onClick={() => { update("scopeAdjusted", true); go("features") }} className="border-border hover:border-primary/50 rounded-xl border p-4 text-left"><span className="font-medium">Reduce the scope</span><span className="text-muted-foreground mt-1 block text-sm">I&apos;ll remove lower-priority features for now.</span></button><button type="button" onClick={() => go("mvp")} className="border-border hover:border-primary/50 rounded-xl border p-4 text-left"><span className="font-medium">Start with an MVP</span><span className="text-muted-foreground mt-1 block text-sm">I&apos;ll identify what is essential for the first version.</span></button><button type="button" onClick={() => go("contact")} className="text-muted-foreground p-4 text-left text-sm underline underline-offset-4">Send the brief as it is</button></div></Question>}
+        {step === "mvp" && <Question title="Which features are essential for the first version?" help="Everything else can follow in a later phase."><div className="divide-border divide-y rounded-xl border">{answers.features.filter((value) => value !== C.OTHER && value !== C.NOT_SURE).map((value) => { const label = featureOptions.find((item) => item.value === value)?.label ?? value; const essential = answers.mvpEssential.includes(value); return <div key={value} className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between"><span className="font-medium">{label}</span><div className="flex gap-2"><button type="button" onClick={() => setAnswers((current) => ({ ...current, mvpEssential: essential ? current.mvpEssential.filter((item) => item !== value) : [...current.mvpEssential, value], mvpFuture: current.mvpFuture.filter((item) => item !== value) }))} className={essential ? "bg-primary text-primary-foreground rounded-full px-3 py-1.5 text-sm" : "border-border hover:border-primary rounded-full border px-3 py-1.5 text-sm"}>{essential ? "Essential" : "Can wait"}</button></div></div> })}</div></Question>}
+        {step === "contact" && <Question title="How can I reach you?" help="Just the essentials. I won&apos;t add you to a mailing list."><div className="grid gap-5 sm:grid-cols-2"><TextField label="Full name" value={answers.contact.name} onChange={(value) => updateContact("name", value)} required /><TextField label="Email" type="email" value={answers.contact.email} onChange={(value) => updateContact("email", value)} required /><TextField label="Company or project name" value={answers.contact.company} onChange={(value) => updateContact("company", value)} /><TextField label="Role or job title" value={answers.contact.role} onChange={(value) => updateContact("role", value)} /><TextField label="Country" value={answers.contact.country} onChange={(value) => updateContact("country", value)} /><TextField label="Time zone" value={answers.contact.timezone} onChange={(value) => updateContact("timezone", value)} placeholder="For example: GMT+7" /></div><p className="text-muted-foreground mt-8 text-sm">Preferred communication method</p><ChoiceGrid options={C.contactMethods.map((method) => ({ value: method.value, label: method.label }))} value={answers.contact.method} onChange={(value) => updateContact("method", value)} /><label className="text-muted-foreground mt-6 flex items-start gap-3 text-sm"><input type="checkbox" checked={answers.contact.consent} onChange={(event) => updateContact("consent", event.target.checked)} className="accent-primary mt-1 size-4" /><span>I agree that Sugeng can use these details to reply to my project inquiry.</span></label></Question>}
+        {step === "review" && <Review answers={answers} featureOptions={featureOptions} budgetOptions={budgetOptions} />}
       </div>
 
-      <div className="min-h-[32rem]">
-        {step === 0 && <Question title="What are you looking to build?" description="Choose the closest fit. You can always explain the details later." content={<ChoiceGrid options={projectTypes} selected={data.projectType} onSelect={(value) => update("projectType", value)} />} />}
-        {step === 1 && <Question title="What should this project help you achieve?" description="Choose one or more goals. These help shape the first version." content={<ChoiceGrid options={objectives} selected={data.objectives} multiple onSelect={(value) => toggle("objectives", value)} />} />}
-        {step === 2 && <Question title="What should the experience include?" description="Choose everything that sounds relevant, even if you&apos;re not sure yet." content={<ChoiceGrid options={features} selected={data.features} multiple onSelect={(value) => toggle("features", value)} />} />}
-        {step === 3 && <Question title="Who is this for?" description="Tell me who will use it and what they need to accomplish." content={<textarea value={data.audience} onChange={(event) => update("audience", event.target.value)} placeholder="For example: independent consultants who need a faster way to collect qualified leads." className="border-border bg-background focus:border-primary focus:ring-primary/20 min-h-36 w-full resize-y rounded-xl border p-4 outline-none focus:ring-2" />} />}
-        {step === 4 && <Question title="What do you already have to start with?" description="Choose everything you already have." content={<ChoiceGrid options={startingPointOptions} selected={data.startingPoint} multiple onSelect={(value) => toggle("startingPoint", value)} />} />}
-        {step === 5 && <Question title="How would you like to manage the project after launch?" description="This helps me recommend the right setup and level of support." content={<ChoiceGrid options={managementOptions} selected={data.management} onSelect={(value) => update("management", value)} />} />}
-        {step === 6 && <Question title="Who will be involved in the project?" description="Knowing the decision-making group helps me plan communication." content={<ChoiceGrid options={[{ value: "just-me", label: "Just me" }, { value: "small-team", label: "A small team" }, { value: "larger-team", label: "A larger organization" }, { value: "client-work", label: "I'm working on behalf of a client" }]} selected={data.team} onSelect={(value) => update("team", value)} />} />}
-        {step === 7 && <Question title="When would you like to launch?" description="A rough timeframe is enough at this stage." content={<ChoiceGrid options={timelineOptions} selected={data.timeline} onSelect={(value) => update("timeline", value)} />} />}
-        {step === 8 && <Question title="What budget range are you planning for?" description="This helps me recommend a realistic scope and approach." content={<div><ChoiceGrid options={budgetOptions} selected={data.budget} onSelect={(value) => update("budget", value)} />{data.budget === "under-1000" && <div className="bg-muted mt-5 rounded-xl p-4"><p className="font-medium">The scope may need to start small at this budget.</p><p className="text-muted-foreground mt-1 text-sm leading-6">Would you prefer to reduce the first phase or revisit the budget?</p><div className="mt-3 flex flex-wrap gap-2"><Button type="button" size="sm" variant={data.budgetPlan === "smaller-scope" ? "default" : "outline"} onClick={() => update("budgetPlan", "smaller-scope")}>Start with a smaller scope</Button><Button type="button" size="sm" variant={data.budgetPlan === "adjust-budget" ? "default" : "outline"} onClick={() => update("budgetPlan", "adjust-budget")}>I can revisit the budget</Button></div></div>}</div>} />}
-        {step === 9 && <Question title="Tell me more about the project." description="What are you building, what feels stuck, and what would success look like?" content={<textarea value={data.brief} onChange={(event) => update("brief", event.target.value)} placeholder="Share any useful context, links, constraints, or ideas..." className="border-border bg-background focus:border-primary focus:ring-primary/20 min-h-52 w-full resize-y rounded-xl border p-4 outline-none focus:ring-2" />} />}
-        {step === 10 && <Question title="Where should I send the follow-up?" description="Just the essentials. I won&apos;t add you to a mailing list." content={<div className="grid gap-5"><Field label="Name" value={data.name} onChange={(value) => update("name", value)} placeholder="Your name" /><Field label="Email" type="email" value={data.email} onChange={(value) => update("email", value)} placeholder="you@company.com" /><Field label="Company or project name" value={data.company} onChange={(value) => update("company", value)} placeholder="Optional" /><Field label="Reference link" value={data.reference} onChange={(value) => update("reference", value)} placeholder="Optional website, Figma, or other link" /></div>} />}
-        {step === 11 && <Review data={data} />}
-      </div>
-
-      <div className="border-border mt-8 flex flex-col-reverse justify-between gap-3 border-t pt-6 sm:flex-row">
-        {step === 0 ? <Button variant="ghost" render={<Link href="/" />} nativeButton={false}><ArrowLeft className="size-4" /> Exit</Button> : <Button variant="ghost" type="button" onClick={previous}><ArrowLeft className="size-4" /> Back</Button>}
-        {step === totalSteps - 1 ? <Button type="button" onClick={submit}>Prepare project email <Send className="size-4" /></Button> : <Button type="button" onClick={next} disabled={!canContinue}>Continue <ArrowRight className="size-4" /></Button>}
-      </div>
+      {error && <p role="alert" className="text-destructive mt-5 text-sm">{error}</p>}
+      {step !== "start" && <div className="border-border mt-8 flex flex-col-reverse justify-between gap-3 border-t pt-6 sm:flex-row">
+        <Button variant="ghost" type="button" onClick={back}><ArrowLeft className="size-4" /> Back</Button>
+        {step === "review" ? <Button type="button" onClick={submit}>Prepare project email <Send className="size-4" /></Button> : <Button type="button" onClick={next}>Continue <ArrowRight className="size-4" /></Button>}
+      </div>}
     </div>
   )
 }
 
-function Question({ title, description, content }: { title: string; description: string; content: ReactNode }) {
-  return <div><h2 className="font-heading text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h2><p className="text-muted-foreground mt-3 max-w-xl leading-7">{description}</p><div className="mt-8">{content}</div></div>
-}
-
-function Field({ label, value, onChange, placeholder, type = "text" }: { label: string; value: string; onChange: (value: string) => void; placeholder: string; type?: string }) {
-  return <label className="grid gap-2 text-sm font-medium">{label}<input type={type} value={value} onChange={(event) => onChange(event.target.value)} placeholder={placeholder} className="border-border bg-background focus:border-primary focus:ring-primary/20 h-11 rounded-lg border px-3 font-normal outline-none focus:ring-2" /></label>
-}
-
-function Review({ data }: { data: IntakeData }) {
+function Review({ answers, featureOptions, budgetOptions }: { answers: Answers; featureOptions: C.Option[]; budgetOptions: C.BudgetRange[] }) {
+  const type = C.projectTypes.find((item) => item.value === answers.projectType)?.label ?? "Not specified"
   const rows = [
-    ["Project", data.projectType],
-    ["Goals", data.objectives.join(", ")],
-    ["Features", data.features.join(", ")],
-    ["Audience", data.audience],
-    ["Starting point", data.startingPoint.join(", ")],
-    ["Management", data.management],
-    ["Timeline", data.timeline],
-    ["Budget", data.budget],
-    ["Contact", data.name + " · " + data.email],
+    ["Project", type],
+    ["Goal", answers.goal === C.OTHER ? answers.goalOther : C.goals.find((item) => item.value === answers.goal)?.label ?? "Not specified"],
+    ["Features", answers.features.map((value) => featureOptions.find((item) => item.value === value)?.label ?? value).join(", ") || answers.notSureDescription || "Not specified"],
+    ["Starting with", answers.status.map((value) => C.startingWith.find((item) => item.value === value)?.label ?? value).join(", ") || "Not specified"],
+    ["Timeline", C.timelines.find((item) => item.value === answers.timeline)?.label ?? "Not specified"],
+    ["Budget", budgetOptions.find((item) => item.value === answers.budget)?.label ?? "Not specified"],
+    ["Contact", answers.contact.name + " · " + answers.contact.email],
   ]
-  return <div><h2 className="font-heading text-3xl font-semibold tracking-tight sm:text-4xl">Review your project brief.</h2><p className="text-muted-foreground mt-3 max-w-xl leading-7">Everything look right? Your answers will be placed into an email for a quick review before you send it.</p><dl className="border-border mt-8 divide-y border-y">{rows.map(([label, value]) => <div key={label} className="grid gap-1 py-4 sm:grid-cols-[9rem_1fr] sm:gap-6"><dt className="text-muted-foreground text-sm">{label}</dt><dd className="text-sm leading-6">{value}</dd></div>)}</dl></div>
+  return <Question title="Review your project brief." help="Everything look right? Your answers will be placed into an email for a final review before you send it."><dl className="border-border divide-y border-y">{rows.map(([label, value]) => <div key={label} className="grid gap-1 py-4 sm:grid-cols-[9rem_1fr] sm:gap-6"><dt className="text-muted-foreground text-sm">{label}</dt><dd className="text-sm leading-6">{value}</dd></div>)}</dl><div className="bg-muted mt-6 rounded-xl p-4 text-sm leading-6"><span className="font-medium">Project brief: </span>{answers.brief}</div></Question>
 }

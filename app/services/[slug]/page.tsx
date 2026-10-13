@@ -134,7 +134,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
               <p className="font-heading mt-3 text-3xl font-semibold">{service.price}</p>
               <p className="text-muted-foreground mt-3 text-sm leading-6">{service.priceNote}</p>
               <Button size="lg" className="mt-6 w-full" render={<Link href="/start-project" />} nativeButton={false}>
-                Get started <ArrowRight className="ml-2 size-4" />
+                Start a project <ArrowRight className="ml-2 size-4" />
               </Button>
               <div className="border-border mt-6 space-y-4 border-t pt-6 text-sm">
                 <div className="flex items-center gap-3"><Clock3 className="text-primary size-4" /><span>{service.timeline} typical timeline</span></div>

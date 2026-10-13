@@ -21,8 +21,8 @@ export default function HeroSection() {
               complex ideas into clear, useful digital products.
             </p>
             <div className="mt-7 flex flex-col gap-2 sm:flex-row">
-              <Button render={<Link href="/services" />} nativeButton={false}>Explore services</Button>
-              <Button variant="outline" render={<Link href="/work" />} nativeButton={false}>View selected work</Button>
+            <Button size="lg" render={<Link href="/start-project" />} nativeButton={false}>Start a project</Button>
+            <Button variant="outline" size="lg" render={<Link href="/work" />} nativeButton={false}>View selected work</Button>
             </div>
           </div>
 

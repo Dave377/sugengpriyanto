@@ -4,6 +4,7 @@ import Link from "next/link"
 import { Menu, Moon, Sun, X } from "lucide-react"
 import { useState, useSyncExternalStore } from "react"
 import { useTheme } from "next-themes"
+import { Button } from "@/components/ui/button"
 
 const navigation = [
   { href: "/", label: "Home" },
@@ -38,6 +39,9 @@ export default function SiteHeader() {
               </Link>
             ))}
           </nav>
+          <Button size="lg" render={<Link href="/start-project" />} nativeButton={false}>
+            Start a project
+          </Button>
           <ThemeToggle />
         </div>
 
@@ -64,6 +68,9 @@ export default function SiteHeader() {
               {item.label}
             </Link>
           ))}
+          <Button className="mt-2 w-full" size="lg" render={<Link href="/start-project" />} nativeButton={false} onClick={closeMenu}>
+            Start a project
+          </Button>
           <ThemeToggle mobile />
         </nav>
       </div>

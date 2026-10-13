@@ -82,9 +82,9 @@ export default function WorkPage() {
             <h2 className="font-heading text-3xl font-semibold">Have a good problem to solve?</h2>
             <p className="text-primary-foreground/75 mt-2">Let&apos;s turn it into work people remember.</p>
           </div>
-          <Link href="mailto:hello@sugeng.dev" className="bg-background text-foreground w-fit rounded-full px-5 py-3 text-sm font-medium">
-            Start a conversation
-          </Link>
+          <Button size="lg" render={<Link href="/start-project" />} nativeButton={false}>
+            Start a project
+          </Button>
         </div>
       </section>*/}
 

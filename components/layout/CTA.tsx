@@ -15,8 +15,8 @@ export default function CTASection() {
             </p>
           </div>
           <div className="flex shrink-0 flex-col gap-2 sm:flex-row lg:gap-4">
-            <Button variant="outline" render={<Link href="/start-project" />} nativeButton={false}>Start a project</Button>
-            <Button variant="default" size="lg" render={<Link href="/work" />} nativeButton={false}>View selected work</Button>
+            <Button size="lg" render={<Link href="/start-project" />} nativeButton={false}>Start a project</Button>
+            <Button variant="outline" size="lg" render={<Link href="/work" />} nativeButton={false}>View selected work</Button>
           </div>
         </div>
       </div>
