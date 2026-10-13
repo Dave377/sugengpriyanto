@@ -6,6 +6,8 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import CTASection from "@/components/layout/CTA"
 import HowItWorksSection from "@/components/layout/How-it-works"
+import { Reveal } from "@/components/motion/reveal"
+import { TextReveal } from "@/components/motion/text-reveal"
 
 const services = {
   "product-strategy": {
@@ -84,31 +86,31 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
         <Link href="/services" className="text-muted-foreground hover:text-foreground inline-flex items-center gap-2 text-sm transition-colors">
           <ArrowLeft className="size-4" /> Back to services
         </Link>
-        <div className="mt-14 max-w-4xl">
+        <Reveal className="mt-14 max-w-4xl">
           <div>
             <Badge>{service.eyebrow}</Badge>
             <h1 className="font-heading mt-6 max-w-3xl text-5xl leading-tight font-semibold tracking-tight text-balance sm:text-6xl">
-              {service.title}
+              <TextReveal text={service.title} />
             </h1>
           </div>
-          <div className="mt-8 max-w-3xl">
+          <Reveal delay={0.12} className="mt-8 max-w-3xl">
             <p className="text-primary text-sm font-medium uppercase tracking-wider">Overview</p>
             <p className="text-muted-foreground mt-4 text-lg leading-8">{service.intro}</p>
-          </div>
-        </div>
+          </Reveal>
+        </Reveal>
       </section>
 
       <section className="mx-auto max-w-7xl px-4 lg:px-8">
-        <div className="border-border border-y py-8 sm:py-10">
+        <Reveal className="border-border border-y py-8 sm:py-10">
           <div>
             <p className="text-primary text-sm font-medium uppercase tracking-wider">Good fit</p>
             <p className="mt-4 max-w-3xl text-lg leading-8">{service.fit}</p>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       <section className="mx-auto grid max-w-7xl gap-12 px-4 pt-20 lg:grid-cols-[1fr_22rem] lg:px-8">
-        <div className="min-w-0">
+        <Reveal className="min-w-0">
           <div className="border-border border-t pt-8">
             <p className="text-primary text-sm font-medium uppercase tracking-wider">What you&apos;ll get</p>
             <p className="text-muted-foreground mt-4 max-w-2xl leading-7">A focused scope shaped around the stage your product is in and the decision you need to make next.</p>
@@ -124,10 +126,9 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
               ))}
             </ul>
           </div>
+        </Reveal>
 
-        </div>
-
-        <aside className="lg:sticky lg:top-24 lg:self-start">
+        <Reveal delay={0.12} className="lg:sticky lg:top-24 lg:self-start">
           <Card className="border-primary/20 shadow-lg shadow-primary/5">
             <CardContent className="p-6">
               <p className="text-muted-foreground text-sm">{service.package}</p>
@@ -146,13 +147,13 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
               </div>
             </CardContent>
           </Card>
-        </aside>
+        </Reveal>
       </section>
 
       <HowItWorksSection />
 
       <section className="mx-auto max-w-4xl px-4 pt-4 lg:px-8">
-        <div className="border-border border-t pt-10">
+        <Reveal className="border-border border-t pt-10">
           <p className="text-primary text-sm font-medium uppercase tracking-wider">FAQ</p>
           <div className="mt-6">
             {service.faq.map(([question, answer]) => (
@@ -165,7 +166,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
               </details>
             ))}
           </div>
-        </div>
+        </Reveal>
       </section>
 
       <CTASection />

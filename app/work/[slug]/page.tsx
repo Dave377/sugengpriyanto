@@ -4,6 +4,8 @@ import { ArrowLeft, Check } from "lucide-react"
 import { notFound } from "next/navigation"
 import { Badge } from "@/components/ui/badge"
 import CTASection from "../../../components/layout/CTA"
+import { Reveal } from "@/components/motion/reveal"
+import { TextReveal } from "@/components/motion/text-reveal"
 
 const caseStudies = {
   "atlas-analytics": {
@@ -78,25 +80,25 @@ export default async function WorkCaseStudyPage({ params }: { params: Promise<{ 
         <Link href="/work" className="text-muted-foreground hover:text-foreground inline-flex items-center gap-2 text-sm transition-colors">
           <ArrowLeft className="size-4" /> Back to work
         </Link>
-        <div className="mt-14 grid gap-12 lg:grid-cols-[1fr_0.8fr] lg:items-end">
+        <Reveal className="mt-14 grid gap-12 lg:grid-cols-[1fr_0.8fr] lg:items-end">
           <div>
             <Badge>{service.eyebrow}</Badge>
             <h1 className="font-heading mt-6 max-w-3xl text-5xl leading-tight font-semibold tracking-tight text-balance sm:text-6xl">
-              {service.title}
+              <TextReveal text={service.title} />
             </h1>
           </div>
           <p className="text-muted-foreground max-w-xl text-lg leading-8">{service.intro}</p>
-        </div>
+        </Reveal>
       </section>
 
       <section className="mx-auto max-w-7xl px-4 lg:px-8">
-        <div className="relative aspect-[16/9] overflow-hidden rounded-2xl">
+        <Reveal className="relative aspect-[16/9] overflow-hidden rounded-2xl">
           <Image src={service.image} alt={`${service.eyebrow} case study`} fill priority sizes="(max-width: 1280px) 100vw, 1200px" className="object-cover" />
-        </div>
+        </Reveal>
       </section>
 
       <section className="mx-auto max-w-7xl px-4 pt-10 lg:px-8">
-        <div className="border-border divide-border border-y divide-y md:grid md:grid-cols-[0.7fr_1.3fr] md:divide-x md:divide-y-0">
+        <Reveal className="border-border divide-border border-y divide-y md:grid md:grid-cols-[0.7fr_1.3fr] md:divide-x md:divide-y-0">
           <div className="py-8 md:pr-10">
             <p className="text-primary text-sm font-medium uppercase tracking-wider">Tools & stack</p>
             <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2">
@@ -116,11 +118,11 @@ export default async function WorkCaseStudyPage({ params }: { params: Promise<{ 
               ))}
             </ul>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       <section className="mx-auto max-w-4xl px-4 pt-24 lg:px-8">
-        <div className="border-border border-t">
+        <Reveal className="border-border border-t">
           {[
             ["Overview", service.overview],
             ["Challenge", service.challenge],
@@ -134,22 +136,22 @@ export default async function WorkCaseStudyPage({ params }: { params: Promise<{ 
               </p>
             </div>
           ))}
-        </div>
+        </Reveal>
       </section>
 
       <section className="mx-auto max-w-7xl px-4 pt-24 lg:px-8">
-        <div className="border-border border-t pt-10">
+        <Reveal className="border-border border-t pt-10">
           <p className="text-muted-foreground text-sm font-medium uppercase tracking-wider">How we get there</p>
           <div className="mt-10 grid gap-8 md:grid-cols-3">
             {service.steps.map(([title, description], index) => (
-              <div key={title}>
+              <Reveal key={title} delay={index * 0.1}>
                 <span className="text-primary font-mono text-sm">0{index + 1}</span>
                 <h2 className="mt-4 text-xl font-semibold">{title}</h2>
                 <p className="text-muted-foreground mt-3 leading-7">{description}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
-        </div>
+        </Reveal>
       </section>
 
       {/*<section className="mx-auto max-w-7xl px-4 pt-20 lg:px-8">

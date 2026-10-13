@@ -118,7 +118,7 @@ export default function ProjectCarousel({ slides }: { slides: ProjectSlide[] }) 
               aria-label={`Show slide ${index + 1}`}
               aria-current={index === activeIndex}
               onClick={() => setActiveIndex(index)}
-              className={`h-1.5 rounded-full transition-all ${index === activeIndex ? "bg-white w-8" : "bg-white/50 w-1.5"}`}
+              className={`h-1.5 cursor-pointer rounded-full transition-all ${index === activeIndex ? "bg-white w-8" : "bg-white/50 w-1.5"}`}
             />
           ))}
         </div>
@@ -130,7 +130,7 @@ export default function ProjectCarousel({ slides }: { slides: ProjectSlide[] }) 
             aria-label="Previous slide"
             onClick={showPrevious}
             onPointerDown={(event) => event.stopPropagation()}
-            className="size-9 rounded-full"
+            className="size-9 cursor-pointer rounded-full"
           >
             <ArrowLeft />
           </Button>
@@ -141,7 +141,7 @@ export default function ProjectCarousel({ slides }: { slides: ProjectSlide[] }) 
             aria-label="Next slide"
             onClick={showNext}
             onPointerDown={(event) => event.stopPropagation()}
-            className="size-9 rounded-full"
+            className="size-9 cursor-pointer rounded-full"
           >
             <ArrowRight />
           </Button>

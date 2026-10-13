@@ -64,10 +64,7 @@ export default function WorkPage() {
             <ProjectCarousel slides={project.slides} />
             <CardHeader className="px-4 pt-6 sm:px-5">
               <p className="text-muted-foreground text-sm">{project.category}</p>
-              <CardTitle className="flex items-center justify-between text-3xl">
-                {project.title}
-                <ArrowUpRight className="text-muted-foreground size-5 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" />
-              </CardTitle>
+              <CardTitle className="text-3xl">{project.title}</CardTitle>
             </CardHeader>
             <CardContent className="px-4 pb-5 sm:px-5">
               <p className="text-muted-foreground max-w-2xl leading-7">{project.description}</p>
