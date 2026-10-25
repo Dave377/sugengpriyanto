@@ -306,7 +306,7 @@ export default function ProjectIntakeForm() {
         <div className="bg-primary/10 text-primary mx-auto flex size-12 items-center justify-center rounded-full"><Check className="size-6" /></div>
         <h2 className="font-heading mt-6 text-3xl font-semibold">Your project brief is in.</h2>
         <p className="text-muted-foreground mx-auto mt-3 max-w-md leading-7">Your email app should open with the answers attached. Send it when you&apos;re ready, and I&apos;ll review the project before getting back to you.</p>
-        <Button className="mt-7" render={<Link href="/" />} nativeButton={false}>Back to homepage</Button>
+        <Button className="mt-7 h-11 px-4 sm:h-8" render={<Link href="/" />} nativeButton={false}>Back to homepage</Button>
       </div>
     )
   }
@@ -334,7 +334,7 @@ export default function ProjectIntakeForm() {
         exit={{ opacity: 0, x: -16 }}
         transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
       >
-        {step === "start" && <Question title="Tell me about your project." help="Answer a few practical questions about what you&apos;re building, your goals, timeline, and budget. This gives us a useful starting point before we speak."><div className="flex flex-wrap items-center gap-4"><Button type="button" onClick={next}>{answers.projectType ? "Continue where you left off" : "Start questionnaire"} <ArrowRight className="size-4" /></Button><span className="text-muted-foreground text-sm">Takes about 3–7 minutes.</span></div>{answers.projectType && <button type="button" onClick={reset} className="text-muted-foreground mt-6 text-sm underline underline-offset-4">Start over</button>}</Question>}
+        {step === "start" && <Question title="Tell me about your project." help="Answer a few practical questions about what you&apos;re building, your goals, timeline, and budget. This gives us a useful starting point before we speak."><div className="flex flex-wrap items-center gap-4"><Button className="h-11 px-4 sm:h-8" type="button" onClick={next}>{answers.projectType ? "Continue where you left off" : "Start questionnaire"} <ArrowRight className="size-4" /></Button><span className="text-muted-foreground text-sm">Takes about 3–7 minutes.</span></div>{answers.projectType && <button type="button" onClick={reset} className="text-muted-foreground mt-6 text-sm underline underline-offset-4">Start over</button>}</Question>}
         {step === "type" && <Question title="What are you looking to build?" help="Choose the closest fit. You can explain the details later."><ChoiceGrid options={C.projectTypes} value={answers.projectType} onChange={(value) => setAnswers((current) => ({ ...current, projectType: value as C.ProjectType, features: current.projectType === value ? current.features : [], budget: current.projectType === value ? current.budget : undefined }))} /></Question>}
         {step === "goal" && <Question title="What is the main goal of this project?" help="Choose the outcome that matters most right now."><ChoiceGrid options={C.goals} value={answers.goal} onChange={(value) => update("goal", value)} />{answers.goal === C.OTHER && <div className="mt-5"><TextField label="Tell me a little more" value={answers.goalOther} onChange={(value) => update("goalOther", value)} /></div>}</Question>}
         {step === "features" && <Question title={answers.projectType ? C.featureQuestion[answers.projectType] : "What should the product be able to do?"} help={answers.projectType === "notSure" ? "Describe the idea in your own words, then optionally choose anything that sounds relevant." : "Select everything that applies. If you&apos;re unsure, that&apos;s completely fine."}>{answers.projectType === "notSure" && <TextArea label="In your own words" value={answers.notSureDescription} onChange={(value) => update("notSureDescription", value)} placeholder="Example: Customers should be able to create an account, choose a subscription, upload documents, and track their progress." rows={5} />}<div className={answers.projectType === "notSure" ? "mt-8" : ""}><ChoiceGrid options={featureOptions} values={currentFeatureValues} multiple onChange={(value) => toggle("features", value)} /></div>{answers.features.includes(C.OTHER) && <div className="mt-5"><TextField label="Describe the other feature or requirement" value={answers.featuresOther} onChange={(value) => update("featuresOther", value)} /></div>}</Question>}
@@ -357,8 +357,8 @@ export default function ProjectIntakeForm() {
 
       {error && <p role="alert" className="text-destructive mt-5 text-sm">{error}</p>}
       {step !== "start" && <div className="border-border mt-8 flex flex-col-reverse justify-between gap-3 border-t pt-6 sm:flex-row">
-        <Button variant="ghost" type="button" onClick={back}><ArrowLeft className="size-4" /> Back</Button>
-        {step === "review" ? <Button type="button" onClick={submit}>Prepare project email <Send className="size-4" /></Button> : <Button type="button" onClick={next}>Continue <ArrowRight className="size-4" /></Button>}
+        <Button className="h-11 px-4 sm:h-8" variant="ghost" type="button" onClick={back}><ArrowLeft className="size-4" /> Back</Button>
+        {step === "review" ? <Button className="h-11 px-4 sm:h-8" type="button" onClick={submit}>Prepare project email <Send className="size-4" /></Button> : <Button className="h-11 px-4 sm:h-8" type="button" onClick={next}>Continue <ArrowRight className="size-4" /></Button>}
       </div>}
     </div>
   )
