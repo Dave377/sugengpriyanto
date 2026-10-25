@@ -227,11 +227,7 @@ export const complexityRules = {
 // ---------- Contact channels (toggle `enabled`) ----------
 export const contactMethods = [
   { value: "email", label: "Email", enabled: true },
-  { value: "contra", label: "Contra", enabled: true },
-  { value: "whatsapp", label: "WhatsApp", enabled: true, field: "WhatsApp number" },
-  { value: "telegram", label: "Telegram", enabled: true, field: "Telegram username" },
-  { value: "video", label: "Video call", enabled: true },
-  { value: OTHER, label: "Other", enabled: true, field: "Preferred communication details" },
+  { value: "phone", label: "Phone", enabled: true },
 ].filter((m) => m.enabled);
 
 export const labelOf = (list: Option[], v?: string) => list.find((o) => o.value === v)?.label ?? v ?? "";

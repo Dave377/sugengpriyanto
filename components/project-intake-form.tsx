@@ -42,6 +42,7 @@ type Answers = {
   contact: {
     name: string
     email: string
+    phone: string
     company: string
     role: string
     country: string
@@ -69,7 +70,7 @@ const emptyAnswers = (): Answers => ({
   mvpEssential: [],
   mvpFuture: [],
   scopeAdjusted: false,
-  contact: { name: "", email: "", company: "", role: "", country: "", timezone: "", methodDetail: "", consent: false },
+  contact: { name: "", email: "", phone: "", company: "", role: "", country: "", timezone: "", methodDetail: "", consent: false },
 })
 
 const STORAGE_KEY = "project-questionnaire-v2"
@@ -195,6 +196,7 @@ export default function ProjectIntakeForm() {
     if (step === "contact") {
       if (!answers.contact.name.trim()) return "Please enter your name."
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(answers.contact.email.trim())) return "Please enter a valid email."
+      if (answers.contact.method === "phone" && !answers.contact.phone.trim()) return "Please enter your phone number when choosing Phone."
       if (!answers.contact.consent) return "Please confirm that I can use these details to reply."
     }
     return ""
@@ -249,8 +251,9 @@ export default function ProjectIntakeForm() {
       "Budget: " + (budgetOptions.find((item) => item.value === answers.budget)?.label ?? "Not specified"),
       "Name: " + answers.contact.name,
       "Email: " + answers.contact.email,
+      "Phone: " + (answers.contact.phone || "Not provided"),
       "Company: " + (answers.contact.company || "Not provided"),
-      "Preferred contact: " + (answers.contact.method ?? "Email"),
+      "Preferred contact: " + (C.contactMethods.find((method) => method.value === answers.contact.method)?.label ?? "Email"),
     ].join("\\n\\n")
     window.location.href = "mailto:" + INQUIRY_EMAIL + "?subject=" + encodeURIComponent("New project inquiry from " + answers.contact.name) + "&body=" + encodeURIComponent(body)
     localStorage.removeItem(STORAGE_KEY)
@@ -315,7 +318,7 @@ export default function ProjectIntakeForm() {
         {step === "budget" && <Question title="What investment range are you considering?" help="A rough range is fine. It helps me suggest a scope and approach that fit."><ChoiceGrid options={budgetOptions} value={answers.budget} onChange={(value) => update("budget", value)} /></Question>}
         {step === "compat" && <Question title="This scope may be difficult to deliver within that budget." help="That does not necessarily mean the project cannot move forward. We can reduce the first phase, start with an MVP, or adjust the budget."><div className="grid gap-3"><button type="button" onClick={() => go("budget")} className="border-border hover:border-primary/50 rounded-xl border p-4 text-left"><span className="font-medium">Adjust the budget</span><span className="text-muted-foreground mt-1 block text-sm">I can revisit the investment range.</span></button><button type="button" onClick={() => { update("scopeAdjusted", true); go("features") }} className="border-border hover:border-primary/50 rounded-xl border p-4 text-left"><span className="font-medium">Reduce the scope</span><span className="text-muted-foreground mt-1 block text-sm">I&apos;ll remove lower-priority features for now.</span></button><button type="button" onClick={() => go("mvp")} className="border-border hover:border-primary/50 rounded-xl border p-4 text-left"><span className="font-medium">Start with an MVP</span><span className="text-muted-foreground mt-1 block text-sm">I&apos;ll identify what is essential for the first version.</span></button><button type="button" onClick={() => go("contact")} className="text-muted-foreground p-4 text-left text-sm underline underline-offset-4">Send the brief as it is</button></div></Question>}
         {step === "mvp" && <Question title="Which features are essential for the first version?" help="Everything else can follow in a later phase."><div className="divide-border divide-y rounded-xl border">{answers.features.filter((value) => value !== C.OTHER && value !== C.NOT_SURE).map((value) => { const label = featureOptions.find((item) => item.value === value)?.label ?? value; const essential = answers.mvpEssential.includes(value); return <div key={value} className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between"><span className="font-medium">{label}</span><div className="flex gap-2"><button type="button" onClick={() => setAnswers((current) => ({ ...current, mvpEssential: essential ? current.mvpEssential.filter((item) => item !== value) : [...current.mvpEssential, value], mvpFuture: current.mvpFuture.filter((item) => item !== value) }))} className={essential ? "bg-primary text-primary-foreground rounded-full px-3 py-1.5 text-sm" : "border-border hover:border-primary rounded-full border px-3 py-1.5 text-sm"}>{essential ? "Essential" : "Can wait"}</button></div></div> })}</div></Question>}
-        {step === "contact" && <Question title="How can I reach you?" help="Just the essentials. I won&apos;t add you to a mailing list."><div className="grid gap-5 sm:grid-cols-2"><TextField label="Full name" value={answers.contact.name} onChange={(value) => updateContact("name", value)} required /><TextField label="Email" type="email" value={answers.contact.email} onChange={(value) => updateContact("email", value)} required /><TextField label="Company or project name" value={answers.contact.company} onChange={(value) => updateContact("company", value)} /><TextField label="Role or job title" value={answers.contact.role} onChange={(value) => updateContact("role", value)} /><TextField label="Country" value={answers.contact.country} onChange={(value) => updateContact("country", value)} /><TextField label="Time zone" value={answers.contact.timezone} onChange={(value) => updateContact("timezone", value)} placeholder="For example: GMT+7" /></div><p className="text-muted-foreground mt-8 text-sm">Preferred communication method</p><ChoiceGrid options={C.contactMethods.map((method) => ({ value: method.value, label: method.label }))} value={answers.contact.method} onChange={(value) => updateContact("method", value)} /><label className="text-muted-foreground mt-6 flex items-start gap-3 text-sm"><input type="checkbox" checked={answers.contact.consent} onChange={(event) => updateContact("consent", event.target.checked)} className="accent-primary mt-1 size-4" /><span>I agree that Sugeng can use these details to reply to my project inquiry.</span></label></Question>}
+        {step === "contact" && <Question title="How can I reach you?" help="Just the essentials. I won&apos;t add you to a mailing list."><div className="grid gap-5 sm:grid-cols-2"><TextField label="Full name" value={answers.contact.name} onChange={(value) => updateContact("name", value)} required /><TextField label="Email" type="email" value={answers.contact.email} onChange={(value) => updateContact("email", value)} required /><TextField label="Phone number" type="tel" value={answers.contact.phone} onChange={(value) => updateContact("phone", value)} placeholder="For example: +1 555 123 4567" /><TextField label="Company or project name" value={answers.contact.company} onChange={(value) => updateContact("company", value)} /><TextField label="Role or job title" value={answers.contact.role} onChange={(value) => updateContact("role", value)} /><TextField label="Country" value={answers.contact.country} onChange={(value) => updateContact("country", value)} /><TextField label="Time zone" value={answers.contact.timezone} onChange={(value) => updateContact("timezone", value)} placeholder="For example: GMT+7" /></div><p className="text-muted-foreground mt-8 text-sm">Preferred communication method</p><ChoiceGrid options={C.contactMethods.map((method) => ({ value: method.value, label: method.label }))} value={answers.contact.method} onChange={(value) => updateContact("method", value)} /><label className="text-muted-foreground mt-6 flex items-start gap-3 text-sm"><input type="checkbox" checked={answers.contact.consent} onChange={(event) => updateContact("consent", event.target.checked)} className="accent-primary mt-1 size-4" /><span>I agree that Sugeng can use these details to reply to my project inquiry.</span></label></Question>}
         {step === "review" && <Review answers={answers} featureOptions={featureOptions} budgetOptions={budgetOptions} />}
       </motion.div>
       </AnimatePresence>
@@ -338,7 +341,7 @@ function Review({ answers, featureOptions, budgetOptions }: { answers: Answers; 
     ["Starting with", answers.status.map((value) => C.startingWith.find((item) => item.value === value)?.label ?? value).join(", ") || "Not specified"],
     ["Timeline", C.timelines.find((item) => item.value === answers.timeline)?.label ?? "Not specified"],
     ["Budget", budgetOptions.find((item) => item.value === answers.budget)?.label ?? "Not specified"],
-    ["Contact", answers.contact.name + " · " + answers.contact.email],
+    ["Contact", answers.contact.name + " · " + answers.contact.email + (answers.contact.phone ? " · " + answers.contact.phone : "")],
   ]
   return <Question title="Review your project brief." help="Everything look right? Your answers will be placed into an email for a final review before you send it."><dl className="border-border divide-y border-y">{rows.map(([label, value]) => <div key={label} className="grid gap-1 py-4 sm:grid-cols-[9rem_1fr] sm:gap-6"><dt className="text-muted-foreground text-sm">{label}</dt><dd className="text-sm leading-6">{value}</dd></div>)}</dl><div className="bg-muted mt-6 rounded-xl p-4 text-sm leading-6"><span className="font-medium">Project brief: </span>{answers.brief}</div></Question>
 }

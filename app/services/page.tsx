@@ -1,17 +1,11 @@
 import Link from "next/link"
-import { ArrowUpRight, Blocks, Compass, Layers3, PenTool } from "lucide-react"
+import { ArrowUpRight } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import CTASection from "@/components/layout/CTA"
 import { Reveal } from "@/components/motion/reveal"
 import { TextReveal } from "@/components/motion/text-reveal"
-
-const services = [
-  { number: "01", icon: Compass, title: "Product strategy", slug: "product-strategy", description: "Turn uncertainty into a focused direction your team can act on.", fit: "Early-stage products and new product bets", includes: ["Product vision", "Opportunity mapping", "Prioritized roadmap"] },
-  { number: "02", icon: PenTool, title: "UX & UI design", slug: "ux-ui-design", description: "Make complex products feel clear, useful, and distinctive from the first interaction.", fit: "New experiences and major redesigns", includes: ["User journeys", "Interaction prototypes", "Interface direction"] },
-  { number: "03", icon: Blocks, title: "Design systems", slug: "design-systems", description: "Create a shared visual language that helps teams move faster without losing character.", fit: "Growing products and scaling teams", includes: ["Design foundations", "Reusable components", "Team documentation"] },
-  { number: "04", icon: Layers3, title: "Frontend development", slug: "frontend-development", description: "Bring thoughtful design to life as a fast, accessible, and maintainable interface.", fit: "Product launches and marketing sites", includes: ["React interfaces", "Responsive behavior", "Launch support"] },
-]
+import { services } from "@/lib/site-content"
 
 const process = [
   ["01", "Understand", "We align on the audience, the opportunity, and the outcome before making anything."],

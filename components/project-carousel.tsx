@@ -10,7 +10,7 @@ type ProjectSlide = {
   className: string
 }
 
-export default function ProjectCarousel({ slides }: { slides: ProjectSlide[] }) {
+export default function ProjectCarousel({ slides }: { slides: readonly ProjectSlide[] }) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
   const pointerStart = useRef<number | null>(null)

@@ -8,179 +8,19 @@ import CTASection from "@/components/layout/CTA"
 import LogoClouds from "@/components/ui/logo-cloud"
 import { Reveal } from "@/components/motion/reveal"
 import { TextReveal } from "@/components/motion/text-reveal"
+import { services, workProjects } from "@/lib/site-content"
 
-const featuredWork = [
-  {
-    title: "Atlas Analytics",
-    category: "Product strategy · SaaS",
-    description: "A clearer product direction for an analytics platform helping operations teams act on the numbers that matter.",
-    href: "/work/atlas-analytics",
-    slides: [
-      { label: "Dashboard", title: "Make every signal easier to act on.", className: "bg-indigo-600" },
-      { label: "Workflows", title: "Turn insight into momentum.", className: "bg-violet-600" },
-      { label: "Reporting", title: "Spend less time assembling the story.", className: "bg-sky-600" },
-    ],
-  },
-  {
-    title: "Northstar Commerce",
-    category: "UX & UI design · E-commerce",
-    description: "A more intuitive shopping experience that makes discovery feel personal without slowing down the journey.",
-    href: "/work/northstar-commerce",
-    slides: [
-      { label: "Discovery", title: "Find the right thing faster.", className: "bg-amber-600" },
-      { label: "Collections", title: "Browse with a little more delight.", className: "bg-orange-600" },
-      { label: "Checkout", title: "Keep the good feeling going.", className: "bg-rose-600" },
-    ],
-  },
-]
-
-const services = [
-  ["01", "Product strategy", "product-strategy", "Turn uncertainty into a focused direction your team can act on."],
-  ["02", "UX & UI design", "ux-ui-design", "Make complex products feel clear, useful, and distinctive."],
-  ["03", "Design systems", "design-systems", "Create a shared language that helps teams move faster."],
-  ["04", "Frontend development", "frontend-development", "Bring thoughtful design to life as a fast, accessible interface."],
-]
-
-const process = [
-  ["01", "Understand", "We align on the audience, the opportunity, and the outcome."],
-  ["02", "Explore", "We make the invisible visible through flows, prototypes, and feedback."],
-  ["03", "Deliver", "We refine the strongest direction into work your team can build on."],
-]
+const process = [["01", "Understand", "We align on the audience, the opportunity, and the outcome."], ["02", "Explore", "We make the invisible visible through flows, prototypes, and feedback."], ["03", "Deliver", "We refine the strongest direction into work your team can build on."]] as const
 
 export default function Page() {
   return (
     <main>
-      <section className="mx-auto max-w-7xl px-4 pt-20 pb-24 lg:px-8 lg:pt-32">
-        <div className="max-w-4xl">
-          <Reveal delay={0.05}><Badge>Independent designer & developer</Badge></Reveal>
-          <Reveal delay={0.14}>
-            <h1 className="font-heading mt-7 max-w-4xl text-5xl leading-[1.05] font-semibold tracking-tight text-balance sm:text-7xl">
-              <TextReveal text="I design and build digital experiences that make complex ideas feel clear." />
-            </h1>
-          </Reveal>
-          <Reveal delay={0.24}>
-            <p className="text-muted-foreground mt-8 max-w-2xl text-lg leading-8 text-balance">
-              I help thoughtful teams turn early ideas, growing products, and ambitious redesigns into experiences people understand and want to use.
-            </p>
-          </Reveal>
-          <Reveal delay={0.34}>
-            <div className="mt-9 flex flex-wrap items-center gap-3">
-              <Button size="lg" render={<Link href="/start-project" />} nativeButton={false}>
-                Start a project <ArrowRight className="transition-transform group-hover/button:translate-x-1" />
-              </Button>
-              <Button variant="outline" size="lg" render={<Link href="/work" />} nativeButton={false}>
-                View selected work <ArrowUpRight className="transition-transform group-hover/button:-translate-y-0.5 group-hover/button:translate-x-0.5" />
-              </Button>
-            </div>
-          </Reveal>
-          <Reveal delay={0.44}>
-            <p className="text-muted-foreground mt-10 flex items-center gap-2 text-sm">
-              <span className="bg-emerald-500 size-2 animate-pulse rounded-full" /> Available for selected projects
-            </p>
-          </Reveal>
-        </div>
-      </section>
-
+      <section className="mx-auto max-w-7xl px-4 pt-20 pb-24 lg:px-8 lg:pt-32"><div className="max-w-4xl"><Reveal delay={0.05}><Badge>Independent designer &amp; developer</Badge></Reveal><Reveal delay={0.14}><h1 className="font-heading mt-7 max-w-4xl text-5xl leading-[1.05] font-semibold tracking-tight text-balance sm:text-7xl"><TextReveal text="I design and build digital experiences that make complex ideas feel clear." /></h1></Reveal><Reveal delay={0.24}><p className="text-muted-foreground mt-8 max-w-2xl text-lg leading-8 text-balance">I help thoughtful teams turn early ideas, growing products, and ambitious redesigns into experiences people understand and want to use.</p></Reveal><Reveal delay={0.34}><div className="mt-9 flex flex-wrap items-center gap-3"><Button size="lg" render={<Link href="/start-project" />} nativeButton={false}>Start a project <ArrowRight /></Button><Button variant="outline" size="lg" render={<Link href="/work" />} nativeButton={false}>View selected work <ArrowUpRight /></Button></div></Reveal><Reveal delay={0.44}><p className="text-muted-foreground mt-10 flex items-center gap-2 text-sm"><span className="bg-emerald-500 size-2 animate-pulse rounded-full" /> Available for selected projects</p></Reveal></div></section>
       <LogoClouds />
-
-      <section className="mx-auto max-w-7xl px-4 lg:px-8 py-8">
-        <Reveal className="mb-10 flex items-end justify-between gap-6">
-          <div>
-            <p className="text-primary text-sm font-medium uppercase tracking-wider">Selected work</p>
-            <h2 className="font-heading mt-3 text-3xl font-semibold sm:text-4xl"><TextReveal text="A few things I've helped shape." /></h2>
-          </div>
-          <Link href="/work" className="text-primary hidden items-center gap-2 text-sm font-medium hover:underline sm:inline-flex">
-            See all work <ArrowRight className="size-4" />
-          </Link>
-        </Reveal>
-        <div className="space-y-8">
-          {featuredWork.map((project, index) => (
-            <Reveal key={project.title} delay={index * 0.1}>
-            <Card className="overflow-visible p-2 transition-shadow duration-300 hover:shadow-xl sm:p-3">
-              <ProjectCarousel slides={project.slides} />
-              <CardContent className="px-3 pt-7 pb-4 sm:px-5 sm:pb-5">
-                <p className="text-muted-foreground text-sm">{project.category}</p>
-                <h3 className="font-heading mt-2 text-3xl font-semibold">{project.title}</h3>
-                <p className="text-muted-foreground mt-3 max-w-2xl leading-7">{project.description}</p>
-                <Link href={project.href} className="text-primary mt-5 inline-flex items-center gap-2 text-sm font-medium hover:underline">
-                  View case study <ArrowUpRight className="size-4" />
-                </Link>
-              </CardContent>
-            </Card>
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-4 pt-28 lg:px-8">
-        <Reveal className="grid gap-10 lg:grid-cols-[0.7fr_1.3fr]">
-          <div>
-            <p className="text-primary text-sm font-medium uppercase tracking-wider">Services</p>
-            <h2 className="font-heading mt-3 max-w-sm text-3xl font-semibold sm:text-4xl"><TextReveal text="The right kind of help for the next stage." /></h2>
-            <Link href="/services" className="text-primary mt-6 inline-flex items-center gap-2 text-sm font-medium hover:underline">
-              Explore all services <ArrowRight className="size-4" />
-            </Link>
-          </div>
-          <div className="border-border border-t">
-            {services.map(([number, title, slug, description]) => (
-              <Link key={title} href={`/services/${slug}`} className="border-border group grid gap-3 border-b py-6 sm:grid-cols-[3rem_0.8fr_1fr_auto] sm:items-center sm:gap-6">
-                <span className="text-muted-foreground font-mono text-sm">{number}</span>
-                <h3 className="text-xl font-medium">{title}</h3>
-                <p className="text-muted-foreground leading-6">{description}</p>
-                <ArrowUpRight className="text-primary size-5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-              </Link>
-            ))}
-          </div>
-        </Reveal>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-4 pt-28 lg:px-8">
-        <Reveal className="border-border border-t pt-10">
-          <p className="text-primary text-sm font-medium uppercase tracking-wider">Working together</p>
-          <div className="mt-8 grid gap-8 md:grid-cols-3">
-            {process.map(([number, title, description]) => (
-              <div key={number}>
-                <span className="text-muted-foreground font-mono text-sm">{number}</span>
-                <h3 className="mt-4 text-xl font-semibold">{title}</h3>
-                <p className="text-muted-foreground mt-3 leading-7">{description}</p>
-              </div>
-            ))}
-          </div>
-        </Reveal>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-4 pt-28 lg:px-8">
-        <Reveal className="border-border border-t pt-10">
-          <p className="text-primary text-sm font-medium uppercase tracking-wider">The studio</p>
-          <div className="mt-5 grid gap-12 lg:grid-cols-[1fr_0.8fr] lg:items-start">
-            <div>
-              <h2 className="font-heading max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl"><TextReveal text="A hands-on design partner for work that matters." /></h2>
-              <p className="text-muted-foreground mt-6 max-w-2xl text-lg leading-8">I lead the work from the first question through the final detail, bringing strategy, design, and development together around what needs to change.</p>
-              <Link href="/about" className="text-primary mt-7 inline-flex items-center gap-2 text-sm font-medium hover:underline">
-                More about me <ArrowRight className="size-4" />
-              </Link>
-            </div>
-            <div className="from-primary/20 via-muted to-secondary/30 flex min-h-64 items-end justify-between rounded-2xl bg-gradient-to-br p-7 sm:min-h-80">
-              <span className="font-heading text-7xl font-semibold tracking-tight opacity-30">SP</span>
-              <span className="max-w-24 text-right text-sm font-medium">Independent studio<br />Working globally</span>
-            </div>
-          </div>
-          <div className="mt-14 grid border-t md:grid-cols-3 md:divide-x">
-            {[
-              ["01", "Agree what needs to change", "We clarify the brief, preserve what works, and define the right scope."],
-              ["02", "Review the direction", "You see the work early, while the direction is still focused and flexible."],
-              ["03", "Complete and hand over", "The final work arrives with the files, components, and guidance your team needs."],
-            ].map(([number, title, description]) => (
-              <div key={number} className="border-border border-b py-7 md:border-b-0 md:px-6 md:first:pl-0 md:last:pr-0">
-                <span className="text-muted-foreground font-mono text-sm">{number}</span>
-                <h3 className="mt-5 text-xl font-semibold">{title}</h3>
-                <p className="text-muted-foreground mt-3 leading-7">{description}</p>
-              </div>
-            ))}
-          </div>
-        </Reveal>
-      </section>
-
+      <section className="mx-auto max-w-7xl px-4 py-8 lg:px-8"><Reveal className="mb-10 flex items-end justify-between gap-6"><div><p className="text-primary text-sm font-medium uppercase tracking-wider">Selected work</p><h2 className="font-heading mt-3 text-3xl font-semibold sm:text-4xl"><TextReveal text="A few things I've helped shape." /></h2></div><Link href="/work" className="text-primary hidden items-center gap-2 text-sm font-medium hover:underline sm:inline-flex">See all work <ArrowRight className="size-4" /></Link></Reveal><div className="space-y-8">{workProjects.slice(0, 2).map((project, index) => <Reveal key={project.title} delay={index * 0.1}><Card className="overflow-visible p-2 transition-shadow duration-300 hover:shadow-xl sm:p-3"><ProjectCarousel slides={project.slides} /><CardContent className="px-3 pt-7 pb-4 sm:px-5 sm:pb-5"><p className="text-muted-foreground text-sm">{project.category}</p><h3 className="font-heading mt-2 text-3xl font-semibold">{project.title}</h3><p className="text-muted-foreground mt-3 max-w-2xl leading-7">{project.homeDescription}</p><Link href={`/work/${project.slug}`} className="text-primary mt-5 inline-flex items-center gap-2 text-sm font-medium hover:underline">View case study <ArrowUpRight className="size-4" /></Link></CardContent></Card></Reveal>)}</div></section>
+      <section className="mx-auto max-w-7xl px-4 pt-28 lg:px-8"><Reveal className="grid gap-10 lg:grid-cols-[0.7fr_1.3fr]"><div><p className="text-primary text-sm font-medium uppercase tracking-wider">Services</p><h2 className="font-heading mt-3 max-w-sm text-3xl font-semibold sm:text-4xl"><TextReveal text="The right kind of help for the next stage." /></h2><Link href="/services" className="text-primary mt-6 inline-flex items-center gap-2 text-sm font-medium hover:underline">Explore all services <ArrowRight className="size-4" /></Link></div><div className="border-border border-t">{services.map(({ number, title, slug, description }) => <Link key={title} href={`/services/${slug}`} className="border-border group grid gap-3 border-b py-6 sm:grid-cols-[3rem_0.8fr_1fr_auto] sm:items-center sm:gap-6"><span className="text-muted-foreground font-mono text-sm">{number}</span><h3 className="text-xl font-medium">{title}</h3><p className="text-muted-foreground leading-6">{description}</p><ArrowUpRight className="text-primary size-5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></Link>)}</div></Reveal></section>
+      <section className="mx-auto max-w-7xl px-4 pt-28 lg:px-8"><Reveal className="border-border border-t pt-10"><p className="text-primary text-sm font-medium uppercase tracking-wider">Working together</p><div className="mt-8 grid gap-8 md:grid-cols-3">{process.map(([number, title, description]) => <div key={number}><span className="text-muted-foreground font-mono text-sm">{number}</span><h3 className="mt-4 text-xl font-semibold">{title}</h3><p className="text-muted-foreground mt-3 leading-7">{description}</p></div>)}</div></Reveal></section>
+      <section className="mx-auto max-w-7xl px-4 pt-28 lg:px-8"><Reveal className="border-border border-t pt-10"><p className="text-primary text-sm font-medium uppercase tracking-wider">The studio</p><div className="mt-5 grid gap-12 lg:grid-cols-[1fr_0.8fr] lg:items-start"><div><h2 className="font-heading max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl"><TextReveal text="A hands-on design partner for work that matters." /></h2><p className="text-muted-foreground mt-6 max-w-2xl text-lg leading-8">I lead the work from the first question through the final detail, bringing strategy, design, and development together around what needs to change.</p><Link href="/about" className="text-primary mt-7 inline-flex items-center gap-2 text-sm font-medium hover:underline">More about me <ArrowRight className="size-4" /></Link></div><div className="from-primary/20 via-muted to-secondary/30 flex min-h-64 items-end justify-between rounded-2xl bg-gradient-to-br p-7 sm:min-h-80"><span className="font-heading text-7xl font-semibold tracking-tight opacity-30">SP</span><span className="max-w-24 text-right text-sm font-medium">Independent studio<br />Working globally</span></div></div><div className="mt-14 grid border-t md:grid-cols-3 md:divide-x">{[["01", "Agree what needs to change", "We clarify the brief, preserve what works, and define the right scope."], ["02", "Review the direction", "You see the work early, while the direction is still focused and flexible."], ["03", "Complete and hand over", "The final work arrives with the files, components, and guidance your team needs."]].map(([number, title, description]) => <div key={number} className="border-border border-b py-7 md:border-b-0 md:px-6 md:first:pl-0 md:last:pr-0"><span className="text-muted-foreground font-mono text-sm">{number}</span><h3 className="mt-5 text-xl font-semibold">{title}</h3><p className="text-muted-foreground mt-3 leading-7">{description}</p></div>)}</div></Reveal></section>
       <CTASection />
     </main>
   )
