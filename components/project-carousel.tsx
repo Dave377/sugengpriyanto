@@ -81,15 +81,6 @@ export default function ProjectCarousel({ slides }: { slides: readonly ProjectSl
           >
             <div className={`relative h-full min-h-72 overflow-hidden rounded-lg bg-cover bg-center sm:min-h-96 md:min-h-0 ${slide.className} ${position === "active" ? "shadow-2xl" : ""}`} style={slide.image ? { backgroundImage: `url("${slide.image}")` } : undefined}>
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_20%,rgba(255,255,255,0.45),transparent_28%),linear-gradient(135deg,transparent_40%,rgba(255,255,255,0.18)_40%,rgba(255,255,255,0.18)_60%,transparent_60%)]" />
-              <div className="relative flex h-full flex-col justify-between p-6 pb-20 sm:min-h-96 sm:p-8 sm:pb-24">
-                <div className="flex items-center justify-between text-sm font-medium text-white/80">
-                  <span>{slide.label}</span>
-                  <span>{String(index + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}</span>
-                </div>
-                <p className="font-heading max-w-xs text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-                  {slide.title}
-                </p>
-              </div>
             </div>
           </div>
         )
