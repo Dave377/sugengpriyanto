@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react"
 import Link from "next/link"
-import { ArrowLeft, ArrowRight, Check, Send } from "lucide-react"
+import { ArrowLeft, ArrowRight, Check, ChevronDown, Send } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
 
 import * as C from "@/questionnaire-sample/config"
@@ -75,6 +75,7 @@ const emptyAnswers = (): Answers => ({
 
 const STORAGE_KEY = "project-questionnaire-v2"
 const INQUIRY_EMAIL = "hello@sugengpriyanto.my.id"
+const timeZoneOptions = ["GMT-08:00 Pacific Time", "GMT-05:00 Eastern Time", "GMT+00:00 UTC", "GMT+01:00 Central European Time", "GMT+05:30 India Standard Time", "GMT+07:00 Indochina Time", "GMT+08:00 Singapore Time", "GMT+09:00 Japan Standard Time", "GMT+10:00 Australian Eastern Time"]
 
 function flowFor(answers: Answers): StepId[] {
   const flow: StepId[] = ["type", "goal", "features"]
@@ -101,6 +102,37 @@ function ChoiceGrid({ options, value, values, multiple = false, onChange }: { op
           </button>
         )
       })}
+    </div>
+  )
+}
+
+function RadioCards({ options, value, onChange }: { options: { value: string; label: string }[]; value?: string; onChange: (value: string) => void }) {
+  return (
+    <div className="grid gap-3 sm:grid-cols-2" role="radiogroup">
+      {options.map((option) => (
+        <label key={option.value} className="group relative cursor-pointer">
+          <input type="radio" name="preferred-communication" value={option.value} checked={value === option.value} onChange={() => onChange(option.value)} className="peer sr-only" />
+          <span className="border-border bg-background peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:ring-primary/20 group-hover:border-primary/50 flex items-center justify-between rounded-xl border p-4 transition-colors peer-checked:ring-2">
+            <span className="font-medium">{option.label}</span>
+            <span className={`border-muted-foreground/40 flex size-5 items-center justify-center rounded-full border-2 transition-colors ${value === option.value ? "border-primary bg-primary" : ""}`}><span className="bg-primary-foreground size-2 rounded-full" /></span>
+          </span>
+        </label>
+      ))}
+    </div>
+  )
+}
+
+function StyledSelect({ label, value, options, onChange, placeholder }: { label: string; value: string; options: string[]; onChange: (value: string) => void; placeholder: string }) {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <div className="relative grid gap-2 text-sm font-medium">
+      <span>{label}</span>
+      <button type="button" aria-haspopup="listbox" aria-expanded={open} onClick={() => setOpen((current) => !current)} className="border-border bg-background focus:border-primary focus:ring-primary/20 flex h-11 items-center justify-between rounded-lg border px-3 text-left font-normal outline-none focus:ring-2">
+        <span className={value ? "text-foreground" : "text-muted-foreground"}>{value || placeholder}</span>
+        <ChevronDown className={`text-muted-foreground size-4 transition-transform ${open ? "rotate-180" : ""}`} />
+      </button>
+      {open && <div role="listbox" aria-label={label} className="border-border bg-popover absolute top-full z-20 mt-2 max-h-64 w-full overflow-auto rounded-xl border p-1 shadow-lg">{options.map((option) => <button key={option} type="button" role="option" aria-selected={value === option} onClick={() => { onChange(option); setOpen(false) }} className={`hover:bg-muted flex w-full items-center rounded-lg px-3 py-2.5 text-left text-sm font-normal ${value === option ? "bg-primary/10 text-primary" : ""}`}>{option}</button>)}</div>}
     </div>
   )
 }
@@ -318,7 +350,7 @@ export default function ProjectIntakeForm() {
         {step === "budget" && <Question title="What investment range are you considering?" help="A rough range is fine. It helps me suggest a scope and approach that fit."><ChoiceGrid options={budgetOptions} value={answers.budget} onChange={(value) => update("budget", value)} /></Question>}
         {step === "compat" && <Question title="This scope may be difficult to deliver within that budget." help="That does not necessarily mean the project cannot move forward. We can reduce the first phase, start with an MVP, or adjust the budget."><div className="grid gap-3"><button type="button" onClick={() => go("budget")} className="border-border hover:border-primary/50 rounded-xl border p-4 text-left"><span className="font-medium">Adjust the budget</span><span className="text-muted-foreground mt-1 block text-sm">I can revisit the investment range.</span></button><button type="button" onClick={() => { update("scopeAdjusted", true); go("features") }} className="border-border hover:border-primary/50 rounded-xl border p-4 text-left"><span className="font-medium">Reduce the scope</span><span className="text-muted-foreground mt-1 block text-sm">I&apos;ll remove lower-priority features for now.</span></button><button type="button" onClick={() => go("mvp")} className="border-border hover:border-primary/50 rounded-xl border p-4 text-left"><span className="font-medium">Start with an MVP</span><span className="text-muted-foreground mt-1 block text-sm">I&apos;ll identify what is essential for the first version.</span></button><button type="button" onClick={() => go("contact")} className="text-muted-foreground p-4 text-left text-sm underline underline-offset-4">Send the brief as it is</button></div></Question>}
         {step === "mvp" && <Question title="Which features are essential for the first version?" help="Everything else can follow in a later phase."><div className="divide-border divide-y rounded-xl border">{answers.features.filter((value) => value !== C.OTHER && value !== C.NOT_SURE).map((value) => { const label = featureOptions.find((item) => item.value === value)?.label ?? value; const essential = answers.mvpEssential.includes(value); return <div key={value} className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between"><span className="font-medium">{label}</span><div className="flex gap-2"><button type="button" onClick={() => setAnswers((current) => ({ ...current, mvpEssential: essential ? current.mvpEssential.filter((item) => item !== value) : [...current.mvpEssential, value], mvpFuture: current.mvpFuture.filter((item) => item !== value) }))} className={essential ? "bg-primary text-primary-foreground rounded-full px-3 py-1.5 text-sm" : "border-border hover:border-primary rounded-full border px-3 py-1.5 text-sm"}>{essential ? "Essential" : "Can wait"}</button></div></div> })}</div></Question>}
-        {step === "contact" && <Question title="How can I reach you?" help="Just the essentials. I won&apos;t add you to a mailing list."><div className="grid gap-5 sm:grid-cols-2"><TextField label="Full name" value={answers.contact.name} onChange={(value) => updateContact("name", value)} required /><TextField label="Email" type="email" value={answers.contact.email} onChange={(value) => updateContact("email", value)} required /><TextField label="Phone number" type="tel" value={answers.contact.phone} onChange={(value) => updateContact("phone", value)} placeholder="For example: +1 555 123 4567" /><TextField label="Company or project name" value={answers.contact.company} onChange={(value) => updateContact("company", value)} /><TextField label="Role or job title" value={answers.contact.role} onChange={(value) => updateContact("role", value)} /><TextField label="Country" value={answers.contact.country} onChange={(value) => updateContact("country", value)} /><TextField label="Time zone" value={answers.contact.timezone} onChange={(value) => updateContact("timezone", value)} placeholder="For example: GMT+7" /></div><p className="text-muted-foreground mt-8 text-sm">Preferred communication method</p><ChoiceGrid options={C.contactMethods.map((method) => ({ value: method.value, label: method.label }))} value={answers.contact.method} onChange={(value) => updateContact("method", value)} /><label className="text-muted-foreground mt-6 flex items-start gap-3 text-sm"><input type="checkbox" checked={answers.contact.consent} onChange={(event) => updateContact("consent", event.target.checked)} className="accent-primary mt-1 size-4" /><span>I agree that Sugeng can use these details to reply to my project inquiry.</span></label></Question>}
+        {step === "contact" && <Question title="How can I reach you?" help="Just the essentials. I won&apos;t add you to a mailing list."><div className="grid gap-5 sm:grid-cols-2"><TextField label="Full name" value={answers.contact.name} onChange={(value) => updateContact("name", value)} required /><TextField label="Email" type="email" value={answers.contact.email} onChange={(value) => updateContact("email", value)} required /><TextField label="Phone number" type="tel" value={answers.contact.phone} onChange={(value) => updateContact("phone", value)} placeholder="For example: +1 555 123 4567" /><TextField label="Company or project name" value={answers.contact.company} onChange={(value) => updateContact("company", value)} /><TextField label="Role or job title" value={answers.contact.role} onChange={(value) => updateContact("role", value)} /><TextField label="Country" value={answers.contact.country} onChange={(value) => updateContact("country", value)} /><StyledSelect label="Time zone" value={answers.contact.timezone} options={timeZoneOptions} onChange={(value) => updateContact("timezone", value)} placeholder="Choose a time zone" /></div><div className="mt-8"><p className="text-muted-foreground mb-3 text-sm">Preferred communication method</p><RadioCards options={C.contactMethods.map((method) => ({ value: method.value, label: method.label }))} value={answers.contact.method} onChange={(value) => updateContact("method", value)} /></div><label className="text-muted-foreground mt-6 flex items-start gap-3 text-sm"><input type="checkbox" checked={answers.contact.consent} onChange={(event) => updateContact("consent", event.target.checked)} className="accent-primary mt-1 size-4" /><span>I agree that Sugeng can use these details to reply to my project inquiry.</span></label></Question>}
         {step === "review" && <Review answers={answers} featureOptions={featureOptions} budgetOptions={budgetOptions} />}
       </motion.div>
       </AnimatePresence>
