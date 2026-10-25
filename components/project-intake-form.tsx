@@ -238,8 +238,8 @@ export default function ProjectIntakeForm() {
     if (!answers.projectType || !answers.budget || answers.budget === C.BUDGET_UNSURE || answers.budget === C.BUDGET_FLEXIBLE) return "unknown"
     const selected = budgetOptions.find((option) => option.value === answers.budget)
     if (!selected?.max) return "unknown"
-    const base: Record<C.ProjectType, number> = { website: 1500, ecommerce: 2500, mobile: 5000, saas: 6000, saasMobile: 12000, notSure: 4000 }
-    const estimate = base[answers.projectType] + answers.features.length * 450
+    const base: Record<C.ProjectType, number> = { website: 150, ecommerce: 250, mobile: 500, saas: 600, saasMobile: 1200, notSure: 400 }
+    const estimate = base[answers.projectType] + answers.features.length * 45
     if (selected.max >= estimate) return "reasonable"
     if (selected.max >= estimate * 0.6) return "potentially_low"
     return "significantly_below"

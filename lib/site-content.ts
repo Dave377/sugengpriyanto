@@ -603,10 +603,11 @@ export const services = [
 // ] as const
 
 
-export const workProjects = [
+const workProjectsData = [
   {
     title: "Launchport",
     slug: "launchport",
+    liveUrl: "https://launchport.sugengpriyanto.my.id",
     category: "Next.js · LegalTech",
     description:
       "A streamlined incorporation platform helping international solo founders establish a Delaware LLC and launch their US business with confidence.",
@@ -633,6 +634,7 @@ export const workProjects = [
   {
     title: "Orbitfolk",
     slug: "orbitfolk",
+    liveUrl: "https://orbitfolk.sugengpriyanto.my.id",
     category: "Next.js · Travel & Community",
     description:
       "A community-driven travel platform connecting digital nomads through curated workations, shared adventures, and meaningful experiences around the world.",
@@ -659,6 +661,7 @@ export const workProjects = [
   {
     title: "IceDnD",
     slug: "icednd",
+    liveUrl: "https://icednd.sugengpriyanto.my.id",
     category: "Next.js · Luxury Hospitality",
     description:
       "A premium hotel discovery and booking experience showcasing Norway's extraordinary stays, from secluded retreats to unforgettable Arctic escapes.",
@@ -685,6 +688,7 @@ export const workProjects = [
   {
     title: "Venturecraft",
     slug: "venturecraft",
+    liveUrl: "https://venture-craft.sugengpriyanto.my.id",
     category: "Next.js · EdTech",
     description:
       "A premium online learning experience delivering a practical mini MBA for tech founders ready to sharpen their business thinking and build with confidence.",
@@ -711,6 +715,7 @@ export const workProjects = [
   {
     title: "Aurelle",
     slug: "aurelle",
+    liveUrl: "https://aurelle.sugengpriyanto.my.id",
     category: "Shopify · Luxury Fashion",
     description:
       "An editorial-inspired luxury fashion storefront where timeless aesthetics, considered details, and effortless shopping come together.",
@@ -737,6 +742,7 @@ export const workProjects = [
   {
     title: "Stackhire",
     slug: "stackhire",
+    liveUrl: "https://stackhire.sugengpriyanto.my.id",
     category: "Next.js · Recruitment Platform",
     description:
       "A modern job discovery platform connecting ambitious professionals with meaningful career opportunities through a simpler, more focused search experience.",
@@ -763,6 +769,7 @@ export const workProjects = [
   {
     title: "Pixelthorn",
     slug: "pixelthorn",
+    liveUrl: "https://pixelthorn.sugengpriyanto.my.id",
     category: "Framer · Creative Agency",
     description:
       "A bold, immersive agency website showcasing imaginative game worlds, creative expertise, and the craft behind unforgettable interactive experiences.",
@@ -789,6 +796,7 @@ export const workProjects = [
   {
     title: "Maison Ombre",
     slug: "maison-ombre",
+    liveUrl: "https://maison.sugengpriyanto.my.id",
     category: "Next.js · Fine Dining",
     description:
       "An atmospheric fine dining website combining refined storytelling, elegant menu presentation, and a seamless reservation experience.",
@@ -815,6 +823,7 @@ export const workProjects = [
   {
     title: "Velluna",
     slug: "velluna",
+    liveUrl: "https://velluna.sugengpriyanto.my.id",
     category: "Shopify · Beauty & Skincare",
     description:
       "A modern beauty storefront blending soft visual storytelling, thoughtful product discovery, and an effortless shopping experience.",
@@ -841,6 +850,7 @@ export const workProjects = [
   {
     title: "WageFriday",
     slug: "wagefriday",
+    liveUrl: "https://wagefriday.sugengpriyanto.my.id",
     category: "Framer & Frameship · Band Merchandise",
     description:
       "An energetic merchandise storefront combining expressive band identity with a seamless shopping experience built using Framer and Frameship.",
@@ -867,6 +877,7 @@ export const workProjects = [
   {
     title: "Pondok",
     slug: "pondok",
+    liveUrl: "https://pondok.sugengpriyanto.my.id",
     category: "Next.js · Resort & Hospitality",
     description:
       "A tranquil resort booking experience inspired by Bali's natural beauty, bringing immersive destination storytelling and effortless reservations together.",
@@ -893,6 +904,7 @@ export const workProjects = [
   {
     title: "Nox Glitch",
     slug: "nox-glitch",
+    liveUrl: "https://nox.sugengpriyanto.my.id",
     category: "Shopify · Gaming Merchandise",
     description:
       "A high-energy Shopify merchandise store translating a gaming streamer's personality into bold visuals, exclusive drops, and a fan-first shopping experience.",
@@ -919,6 +931,7 @@ export const workProjects = [
   {
     title: "Nadia Hawkins",
     slug: "nadia-hawkins",
+    liveUrl: "https://nh.sugengpriyanto.my.id",
     category: "Next.js · Author & E-commerce",
     description:
       "An elegant author website combining literary storytelling, book discovery, and a personal storefront into one cohesive digital home.",
@@ -943,6 +956,27 @@ export const workProjects = [
     ],
   },
 ] as const;
+
+// Portfolio display order. Edit this list to reorder projects everywhere they appear.
+const portfolioOrder = [
+  "Stackhire",
+  "Venturecraft",
+  "Nox Glitch",
+  "Aurelle",
+  "Maison Ombre",
+  "Orbitfolk",
+  "WageFriday",
+  "Pixelthorn",
+  "Nadia Hawkins",
+  "Pondok",
+  "Velluna",
+  "Launchport",
+  "IceDnD",
+] as const;
+
+export const workProjects = portfolioOrder.map(
+  (title) => workProjectsData.find((project) => project.title === title)!,
+);
 
 
 // export const caseStudies = {

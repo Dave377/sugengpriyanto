@@ -148,45 +148,45 @@ const extra: BudgetRange[] = [
 
 export const budgetRanges: Record<ProjectType, BudgetRange[]> = {
   website: [
-    { value: "w_lt2k", label: "Under $2,000", max: 2000 },
-    { value: "w_2_5k", label: "$2,000 – $5,000", max: 5000 },
-    { value: "w_5_10k", label: "$5,000 – $10,000", max: 10000 },
-    { value: "w_10k_plus", label: "$10,000+", max: 25000 },
+    { value: "w_lt2k", label: "Under $200", max: 200 },
+    { value: "w_2_5k", label: "$200 – $500", max: 500 },
+    { value: "w_5_10k", label: "$500 – $1,000", max: 1000 },
+    { value: "w_10k_plus", label: "$1,000+", max: 2500 },
     ...extra,
   ],
   ecommerce: [
-    { value: "e_lt3k", label: "Under $3,000", max: 3000 },
-    { value: "e_3_8k", label: "$3,000 – $8,000", max: 8000 },
-    { value: "e_8_20k", label: "$8,000 – $20,000", max: 20000 },
-    { value: "e_20k_plus", label: "$20,000+", max: 50000 },
+    { value: "e_lt3k", label: "Under $300", max: 300 },
+    { value: "e_3_8k", label: "$300 – $800", max: 800 },
+    { value: "e_8_20k", label: "$800 – $2,000", max: 2000 },
+    { value: "e_20k_plus", label: "$2,000+", max: 5000 },
     ...extra,
   ],
   mobile: [
-    { value: "m_lt5k", label: "Under $5,000", max: 5000 },
-    { value: "m_5_15k", label: "$5,000 – $15,000", max: 15000 },
-    { value: "m_15_30k", label: "$15,000 – $30,000", max: 30000 },
-    { value: "m_30k_plus", label: "$30,000+", max: 70000 },
+    { value: "m_lt5k", label: "Under $500", max: 500 },
+    { value: "m_5_15k", label: "$500 – $1,500", max: 1500 },
+    { value: "m_15_30k", label: "$1,500 – $3,000", max: 3000 },
+    { value: "m_30k_plus", label: "$3,000+", max: 7000 },
     ...extra,
   ],
   saas: [
-    { value: "s_lt5k", label: "Under $5,000", max: 5000 },
-    { value: "s_5_15k", label: "$5,000 – $15,000", max: 15000 },
-    { value: "s_15_35k", label: "$15,000 – $35,000", max: 35000 },
-    { value: "s_35k_plus", label: "$35,000+", max: 80000 },
+    { value: "s_lt5k", label: "Under $500", max: 500 },
+    { value: "s_5_15k", label: "$500 – $1,500", max: 1500 },
+    { value: "s_15_35k", label: "$1,500 – $3,500", max: 3500 },
+    { value: "s_35k_plus", label: "$3,500+", max: 8000 },
     ...extra,
   ],
   saasMobile: [
-    { value: "sm_lt10k", label: "Under $10,000", max: 10000 },
-    { value: "sm_10_25k", label: "$10,000 – $25,000", max: 25000 },
-    { value: "sm_25_50k", label: "$25,000 – $50,000", max: 50000 },
-    { value: "sm_50k_plus", label: "$50,000+", max: 120000 },
+    { value: "sm_lt10k", label: "Under $1,000", max: 1000 },
+    { value: "sm_10_25k", label: "$1,000 – $2,500", max: 2500 },
+    { value: "sm_25_50k", label: "$2,500 – $5,000", max: 5000 },
+    { value: "sm_50k_plus", label: "$5,000+", max: 12000 },
     ...extra,
   ],
   notSure: [
-    { value: "n_lt5k", label: "Under $5,000", max: 5000 },
-    { value: "n_5_15k", label: "$5,000 – $15,000", max: 15000 },
-    { value: "n_15_40k", label: "$15,000 – $40,000", max: 40000 },
-    { value: "n_40k_plus", label: "$40,000+", max: 100000 },
+    { value: "n_lt5k", label: "Under $500", max: 500 },
+    { value: "n_5_15k", label: "$500 – $1,500", max: 1500 },
+    { value: "n_15_40k", label: "$1,500 – $4,000", max: 4000 },
+    { value: "n_40k_plus", label: "$4,000+", max: 10000 },
     ...extra,
   ],
 };
@@ -194,9 +194,9 @@ export const budgetRanges: Record<ProjectType, BudgetRange[]> = {
 // ---------- Complexity rules (rough signals, not a quote) ----------
 export const complexityRules = {
   // Rough minimum budget for a baseline version of each type.
-  baseCost: { website: 1500, ecommerce: 2500, mobile: 5000, saas: 6000, saasMobile: 12000, notSure: 4000 } as Record<ProjectType, number>,
+  baseCost: { website: 150, ecommerce: 250, mobile: 500, saas: 600, saasMobile: 1200, notSure: 400 } as Record<ProjectType, number>,
   // Added rough cost per complexity point.
-  costPerPoint: { website: 500, ecommerce: 700, mobile: 1000, saas: 1000, saasMobile: 1300, notSure: 900 } as Record<ProjectType, number>,
+  costPerPoint: { website: 50, ecommerce: 70, mobile: 100, saas: 100, saasMobile: 130, notSure: 90 } as Record<ProjectType, number>,
   // Feature keywords (matched against option values) → points.
   featureWeights: [
     { match: /payment|billing|checkout/, points: 2 },
