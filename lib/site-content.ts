@@ -618,16 +618,19 @@ const workProjectsData = [
         label: "Incorporation",
         title: "Start your US company from anywhere.",
         className: "bg-blue-600",
+        image: "/images/projects/launchport-1.png",
       },
       {
         label: "Process",
         title: "Less paperwork. More building.",
         className: "bg-indigo-600",
+        image: "/images/projects/launchport-2.png",
       },
       {
         label: "Guidance",
         title: "A clearer path to doing business in the US.",
         className: "bg-sky-600",
+        image: "/images/projects/launchport-3.png",
       },
     ],
   },
@@ -645,16 +648,19 @@ const workProjectsData = [
         label: "Destinations",
         title: "Work remotely. Feel connected.",
         className: "bg-teal-600",
+        image: "/images/projects/orbitfolk-1.png",
       },
       {
         label: "Experiences",
         title: "Discover places worth staying for.",
         className: "bg-cyan-600",
+        image: "/images/projects/orbitfolk-2.png",
       },
       {
         label: "Community",
         title: "Go somewhere new. Find your people.",
         className: "bg-emerald-600",
+        image: "/images/projects/orbitfolk-3.png",
       },
     ],
   },
@@ -672,16 +678,19 @@ const workProjectsData = [
         label: "Discover",
         title: "Find your extraordinary escape.",
         className: "bg-slate-700",
+        image: "/images/projects/icednd-1.png",
       },
       {
         label: "Stays",
         title: "Where remarkable places meet refined comfort.",
         className: "bg-sky-800",
+        image: "/images/projects/icednd-2.png",
       },
       {
         label: "Booking",
         title: "From inspiration to reservation, effortlessly.",
         className: "bg-indigo-800",
+        image: "/images/projects/icednd-3.png",
       },
     ],
   },
@@ -699,16 +708,19 @@ const workProjectsData = [
         label: "Programs",
         title: "Think like a founder. Build like a leader.",
         className: "bg-violet-700",
+        image: "/images/projects/venturecraft-1.png",
       },
       {
         label: "Learning",
         title: "Big business thinking, built for real life.",
         className: "bg-purple-600",
+        image: "/images/projects/venturecraft-2.png",
       },
       {
         label: "Growth",
         title: "Turn knowledge into your next big move.",
         className: "bg-fuchsia-600",
+        image: "/images/projects/venturecraft-3.png",
       },
     ],
   },
@@ -726,16 +738,19 @@ const workProjectsData = [
         label: "Editorial",
         title: "An expression of effortless elegance.",
         className: "bg-stone-700",
+        image: "/images/projects/aurelle-1.png",
       },
       {
         label: "Collections",
         title: "Discover pieces worth keeping.",
         className: "bg-amber-800",
+        image: "/images/projects/aurelle-2.png",
       },
       {
         label: "Shopping",
         title: "Luxury in every little detail.",
         className: "bg-neutral-800",
+        image: "/images/projects/aurelle-3.png",
       },
     ],
   },
@@ -753,16 +768,19 @@ const workProjectsData = [
         label: "Explore",
         title: "Find work that moves you forward.",
         className: "bg-blue-700",
+        image: "/images/projects/stackhire-1.png",
       },
       {
         label: "Opportunities",
         title: "The right opportunity starts here.",
         className: "bg-indigo-600",
+        image: "/images/projects/stackhire-2.png",
       },
       {
         label: "Applications",
         title: "Less searching. More possibilities.",
         className: "bg-cyan-700",
+        image: "/images/projects/stackhire-3.png",
       },
     ],
   },
@@ -780,16 +798,19 @@ const workProjectsData = [
         label: "Studio",
         title: "Imagination is just the beginning.",
         className: "bg-fuchsia-700",
+        image: "/images/projects/pixelthorn-1.png",
       },
       {
         label: "Projects",
         title: "Worlds built to be remembered.",
         className: "bg-violet-800",
+        image: "/images/projects/pixelthorn-2.png",
       },
       {
         label: "Expertise",
         title: "Where creative vision becomes playable reality.",
         className: "bg-rose-700",
+        image: "/images/projects/pixelthorn-3.png",
       },
     ],
   },
@@ -807,16 +828,19 @@ const workProjectsData = [
         label: "Experience",
         title: "An invitation to something extraordinary.",
         className: "bg-stone-800",
+        image: "/images/projects/maison-1.png",
       },
       {
         label: "Cuisine",
         title: "Every detail tells a story.",
         className: "bg-amber-900",
+        image: "/images/projects/maison-2.png",
       },
       {
         label: "Reservations",
         title: "Your table awaits.",
         className: "bg-neutral-900",
+        image: "/images/projects/maison-3.png",
       },
     ],
   },
@@ -834,16 +858,19 @@ const workProjectsData = [
         label: "Beauty",
         title: "A little ritual. A lot of radiance.",
         className: "bg-rose-400",
+        image: "/images/projects/velluna-1.png",
       },
       {
         label: "Products",
         title: "Find what makes you feel your best.",
         className: "bg-pink-500",
+        image: "/images/projects/velluna-2.png",
       },
       {
         label: "Shopping",
         title: "Your beauty ritual, beautifully simple.",
         className: "bg-fuchsia-500",
+        image: "/images/projects/velluna-3.png",
       },
     ],
   },
@@ -861,16 +888,19 @@ const workProjectsData = [
         label: "Merchandise",
         title: "Wear the music. Own the moment.",
         className: "bg-red-700",
+        image: "/images/projects/wagefriday-1.png",
       },
       {
         label: "Collections",
         title: "Made for the fans who feel everything.",
         className: "bg-zinc-800",
+        image: "/images/projects/wagefriday-2.png",
       },
       {
         label: "Store",
         title: "From the stage to your wardrobe.",
         className: "bg-orange-700",
+        image: "/images/projects/wagefriday-3.png",
       },
     ],
   },
@@ -888,16 +918,19 @@ const workProjectsData = [
         label: "Discover",
         title: "Find your own piece of paradise.",
         className: "bg-emerald-700",
+        image: "/images/projects/pondok-1.png",
       },
       {
         label: "Retreats",
         title: "Slow down. Stay a little longer.",
         className: "bg-lime-700",
+        image: "/images/projects/pondok-2.png",
       },
       {
         label: "Reservations",
         title: "Your Bali escape begins here.",
         className: "bg-teal-700",
+        image: "/images/projects/pondok-3.png",
       },
     ],
   },
@@ -915,16 +948,19 @@ const workProjectsData = [
         label: "Creator",
         title: "Built for the ones who never log off.",
         className: "bg-purple-800",
+        image: "/images/projects/nox-1.png",
       },
       {
         label: "Drops",
         title: "Exclusive gear. Unmistakable energy.",
         className: "bg-fuchsia-700",
+        image: "/images/projects/nox-2.png",
       },
       {
         label: "Community",
         title: "More than merch. Part of the game.",
         className: "bg-indigo-900",
+        image: "/images/projects/nox-3.png",
       },
     ],
   },
@@ -942,16 +978,19 @@ const workProjectsData = [
         label: "Author",
         title: "Every story begins somewhere.",
         className: "bg-amber-800",
+        image: "/images/projects/nh-1.png",
       },
       {
         label: "Books",
         title: "Discover your next favorite story.",
         className: "bg-rose-800",
+        image: "/images/projects/nh-2.png",
       },
       {
         label: "Shop",
         title: "Bring the stories you love a little closer.",
         className: "bg-stone-700",
+        image: "/images/projects/nh-3.png",
       },
     ],
   },
@@ -993,7 +1032,7 @@ export const caseStudies = {
     title: "Make starting a US company feel possible from anywhere.",
     intro:
       "A clearer, more approachable path to US company formation for international founders ready to build beyond borders.",
-    image: "/images/projects/launchport.webp",
+    image: "/images/projects/launchport-1.png",
     tools: ["Next.js", "TypeScript", "Tailwind CSS", "React"],
     overview:
       "Launchport helps non-US solo founders navigate the process of forming a Delaware LLC. The project focused on creating a trustworthy, approachable digital experience that communicates complex legal services without overwhelming visitors. I developed a modern Next.js website that makes the benefits, requirements, and next steps easier to understand.",
@@ -1031,7 +1070,7 @@ export const caseStudies = {
     title: "Make the world feel smaller and the connections bigger.",
     intro:
       "A digital home for remote workers seeking meaningful connections, inspiring destinations, and experiences beyond the ordinary.",
-    image: "/images/projects/orbitfolk.webp",
+    image: "/images/projects/orbitfolk-1.png",
     tools: ["Next.js", "TypeScript", "Tailwind CSS", "React"],
     overview:
       "Orbitfolk is a digital nomad platform inspired by the idea that working remotely should not mean exploring the world alone. Built around curated trips, shared experiences, and community, the website brings destination discovery and meaningful connection into one cohesive experience. I developed a modern Next.js platform designed to capture the freedom of remote work while making travel opportunities easy to explore.",
@@ -1069,7 +1108,7 @@ export const caseStudies = {
     title: "Bring the extraordinary beauty of Norway closer.",
     intro:
       "A refined hotel discovery and booking experience where remarkable destinations meet effortless exploration.",
-    image: "/images/projects/icednd.webp",
+    image: "/images/projects/icednd-1.png",
     tools: ["Next.js", "TypeScript", "Tailwind CSS", "React"],
     overview:
       "IceDnD is a luxury hospitality platform dedicated to extraordinary stays across Norway. From dramatic Arctic landscapes to secluded boutique retreats, the experience brings premium accommodation discovery into a thoughtfully designed digital environment. I developed a Next.js website that balances immersive destination storytelling with a clear and intuitive booking journey.",
@@ -1107,7 +1146,7 @@ export const caseStudies = {
     title: "Make business education work for the next generation of founders.",
     intro:
       "A premium learning experience that turns complex business knowledge into practical momentum for ambitious tech entrepreneurs.",
-    image: "/images/projects/venturecraft.webp",
+    image: "/images/projects/venturecraft-1.png",
     tools: ["Next.js", "TypeScript", "Tailwind CSS", "React"],
     overview:
       "Venturecraft offers a practical mini MBA experience designed for founders building technology-driven businesses. The website introduces an alternative to traditional business education, emphasizing actionable lessons and entrepreneurial thinking. I developed a premium Next.js experience that communicates the value of the program and makes exploring its curriculum feel straightforward and engaging.",
@@ -1145,7 +1184,7 @@ export const caseStudies = {
     title: "Create a shopping experience as considered as the collection.",
     intro:
       "An elegant digital storefront where modern luxury, editorial storytelling, and effortless commerce come together.",
-    image: "/images/projects/aurelle.webp",
+    image: "/images/projects/aurelle-1.png",
     tools: ["Shopify", "Liquid", "JavaScript", "CSS"],
     overview:
       "Aurelle is a luxury fashion store built around timeless aesthetics and considered style. The project focused on translating the brand's sophisticated identity into an elegant online shopping experience. I developed a Shopify storefront that combines immersive editorial presentation with intuitive product discovery and commerce functionality.",
@@ -1183,7 +1222,7 @@ export const caseStudies = {
     title: "Make finding the right opportunity feel less like work.",
     intro:
       "A more intuitive way to discover career opportunities, explore roles, and take the next step with confidence.",
-    image: "/images/projects/stackhire.webp",
+    image: "/images/projects/stackhire-1.png",
     tools: ["Next.js", "TypeScript", "Tailwind CSS", "React"],
     overview:
       "Stackhire is an online job-seeking platform designed to connect professionals with relevant career opportunities. The project focuses on making job discovery simpler, more organized, and more approachable. I developed a Next.js experience that prioritizes clear job information, intuitive navigation, and a consistent interface across the job exploration journey.",
@@ -1221,7 +1260,7 @@ export const caseStudies = {
     title: "Give a game studio's imagination a world of its own.",
     intro:
       "A bold, immersive studio website that brings creative vision, interactive storytelling, and digital craftsmanship together.",
-    image: "/images/projects/pixelthorn.webp",
+    image: "/images/projects/pixelthorn-1.png",
     tools: ["Framer", "Figma", "JavaScript", "CSS"],
     overview:
       "Pixelthorn is a game development agency focused on creating memorable interactive experiences. The website needed to reflect the studio's imaginative character while presenting its creative capabilities and work with clarity. I developed a distinctive Framer experience that combines expressive visual direction, engaging interactions, and flexible content presentation.",
@@ -1259,7 +1298,7 @@ export const caseStudies = {
     title: "Make the dining experience begin before the first course.",
     intro:
       "An atmospheric digital experience that captures the elegance of fine dining and makes every reservation feel special.",
-    image: "/images/projects/maison-ombre.webp",
+    image: "/images/projects/maison-1.png",
     tools: ["Next.js", "TypeScript", "Tailwind CSS", "React"],
     overview:
       "Maison Ombre is a fine dining restaurant experience built around atmosphere, exceptional cuisine, and thoughtful hospitality. The website brings the restaurant's character online through refined visual storytelling, elegant menu presentation, and a clear reservation journey. I developed a responsive Next.js experience that reflects the sense of occasion guests expect from premium dining.",
@@ -1297,7 +1336,7 @@ export const caseStudies = {
     title: "Make discovering everyday beauty feel effortless.",
     intro:
       "A thoughtful beauty storefront that brings product discovery, modern aesthetics, and intuitive shopping into harmony.",
-    image: "/images/projects/velluna.webp",
+    image: "/images/projects/velluna-1.png",
     tools: ["Shopify", "Liquid", "JavaScript", "CSS"],
     overview:
       "Velluna is a beauty and skincare store designed around accessible self-care and considered product experiences. The project focused on developing a visually inviting Shopify storefront that presents products clearly and makes exploring beauty essentials enjoyable. I created a responsive shopping experience that balances soft editorial styling with practical commerce functionality.",
@@ -1335,7 +1374,7 @@ export const caseStudies = {
     title: "Bring the energy of the band into every interaction.",
     intro:
       "A bold merchandise experience that connects music, identity, and fan culture through a distinctive digital storefront.",
-    image: "/images/projects/wagefriday.webp",
+    image: "/images/projects/wagefriday-1.png",
     tools: ["Framer", "Frameship", "Figma", "CSS"],
     overview:
       "WageFriday is a band merchandise store designed to extend the group's identity beyond its music. The project combines Framer's creative website capabilities with Frameship-powered commerce functionality to present merchandise through a visually expressive shopping experience. I built a storefront that reflects the band's personality while making products easy for fans to discover.",
@@ -1373,7 +1412,7 @@ export const caseStudies = {
     title: "Bring the feeling of a Bali escape to the screen.",
     intro:
       "A serene resort discovery and booking experience inspired by the island's natural beauty and slower pace of living.",
-    image: "/images/projects/pondok.webp",
+    image: "/images/projects/pondok-1.png",
     tools: ["Next.js", "TypeScript", "Tailwind CSS", "React"],
     overview:
       "Pondok is a Bali resort booking experience designed to connect travelers with the island's distinctive hospitality and atmosphere. The website combines immersive destination presentation with clear accommodation information and an intuitive reservation journey. I developed a Next.js experience that communicates the calm, welcoming character of a tropical retreat.",
@@ -1411,7 +1450,7 @@ export const caseStudies = {
     title: "Turn a creator's identity into something fans can wear.",
     intro:
       "A high-energy merchandise storefront built around gaming culture, creator personality, and the community behind the screen.",
-    image: "/images/projects/nox-glitch.webp",
+    image: "/images/projects/nox-1.png",
     tools: ["Shopify", "Liquid", "JavaScript", "CSS"],
     overview:
       "Nox Glitch is a gaming streamer's merchandise store created to connect a recognizable online personality with a dedicated fan community. The project focused on building a Shopify experience that reflects the creator's visual identity while providing a straightforward way to explore and purchase merchandise.",
@@ -1449,7 +1488,7 @@ export const caseStudies = {
     title: "Give every story a place to begin.",
     intro:
       "A thoughtful digital home that brings an author's books, creative world, and connection with readers into one experience.",
-    image: "/images/projects/nadia-hawkins.webp",
+    image: "/images/projects/nh-1.png",
     tools: ["Next.js", "TypeScript", "Tailwind CSS", "React"],
     overview:
       "Nadia Hawkins is an author website and online store designed to bring literary storytelling and book discovery into a unified digital experience. The project creates a dedicated home for the author's work, personal identity, and book collection. I developed a responsive Next.js website that combines an editorial atmosphere with approachable shopping and content exploration.",

@@ -8,6 +8,7 @@ type ProjectSlide = {
   label: string
   title: string
   className: string
+  image?: string
 }
 
 export default function ProjectCarousel({ slides }: { slides: readonly ProjectSlide[] }) {
@@ -78,7 +79,7 @@ export default function ProjectCarousel({ slides }: { slides: readonly ProjectSl
             }`}
             aria-hidden={position !== "active"}
           >
-            <div className={`relative h-full min-h-72 overflow-hidden rounded-lg sm:min-h-96 md:min-h-0 ${slide.className} ${position === "active" ? "shadow-2xl" : ""}`}>
+            <div className={`relative h-full min-h-72 overflow-hidden rounded-lg bg-cover bg-center sm:min-h-96 md:min-h-0 ${slide.className} ${position === "active" ? "shadow-2xl" : ""}`} style={slide.image ? { backgroundImage: `url("${slide.image}")` } : undefined}>
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_20%,rgba(255,255,255,0.45),transparent_28%),linear-gradient(135deg,transparent_40%,rgba(255,255,255,0.18)_40%,rgba(255,255,255,0.18)_60%,transparent_60%)]" />
               <div className="relative flex h-full flex-col justify-between p-6 pb-20 sm:min-h-96 sm:p-8 sm:pb-24">
                 <div className="flex items-center justify-between text-sm font-medium text-white/80">
